@@ -1,35 +1,58 @@
 let playBtn = document.getElementById('play-btn')
 let mainCtn = document.getElementById('main-container')
 let hsBtn = document.getElementById('hs-btn')
-
+let homeBtn = document.getElementById('home-btn')
 let url = 'https://newsapi.org/v2/top-headlines?' +
           'country=us&' +
           'apiKey=277ca875809f4f6484e5d830b2158bef'
 
 let wordsArr = []
 
+//eventListener for 'Home'
+homeBtn.addEventListener('click', () => {
+    mainCtn.innerHTML = `<h1>Welcome</h1>
+    <img src="">
+    <p>Rules: Testing</p>`
+})
+
 //eventListener for 'High Score'
 hsBtn.addEventListener('click', () => {
     renderHighScore()
 })
 
-// change DOM for HS
+// change DOM for 'High Score'
 function renderHighScore() {
     mainCtn.innerHTML = ""
     let timeDiv = document.createElement('div')
+    let timeOl = document.createElement('ol')
+    timeDiv.append(timeOl)
     let scoreDiv = document.createElement('div')
+    let scoreOl = document.createElement('ol')
+    scoreDiv.append(scoreOl)
 
-    fetch('http://localhost:3000/games?time=fastest')
+    // get/display best time
+    fetch('http://localhost:3000/games?time=longest')
     .then(r => r.json())
     .then(gamesArr => {
-        
+        gamesArr.forEach(game => {
+            let gameLi = document.createElement('li')
+            gameLi.innerText = `${game.user.username} Time: ${game.time}`
+            timeOl.append(gameLi)
+        })
     })
-    
+
+    // get/display best scores
     fetch('http://localhost:3000/games?score=highest')
     .then(r => r.json())
     .then(gamesArr => {
-        
+        gamesArr.forEach(game => {
+            let gameLi = document.createElement('li')
+            gameLi.innerText = `${game.user.username} Score: ${game.score}`
+            scoreOl.append(gameLi)
+        })
     })
+
+    mainCtn.append(timeDiv, scoreDiv)
 }
 
 // eventListener for 'Play'
@@ -42,7 +65,7 @@ playBtn.addEventListener('click', () => {
     let startBtn = document.createElement('button')
     startBtn.innerText = "Start"
     startBtn.addEventListener('click', () => {
-        renderGame()
+        fetchWords(wordsArr)
     })
     mainCtn.append(inputLabel, userInput, startBtn)
 })
@@ -53,7 +76,7 @@ function incrementSeconds(seconds, timer){
     console.log("test")
 }
 
-// fetching words for start of game
+// fetching words before start of game
 async function fetchWords(words) {
     let res = await fetch(url)
     let response = await res.json()
@@ -64,19 +87,19 @@ async function fetchWords(words) {
             })
         }
     })
-    // renderGame(words)
+    // starts game
+    renderGame(words)
 }
 
 // render the game
 function renderGame(words){
     mainCtn.innerHTML = ""
 
-    // gets words
-    fetchWords(wordsArr)
-
     // creates game DOM
     let gameDiv = document.createElement('div')
     let quitBtn = document.createElement('button')
+    quitBtn.innerText = 'Quit'
+    quitBtn.className = 'btn btn-danger'
     let inputField = document.createElement('input')
     let timeDiv = document.createElement('div')
     let scoreDiv = document.createElement('div')
@@ -91,10 +114,7 @@ function renderGame(words){
 
     scoreDiv.append(scoreLabel, score)
     timeDiv.append(timerLabel, timer)
-
-    gameDiv.innerText = wordsArr[0]
     
     mainCtn.append(gameDiv, inputField, timeDiv, scoreDiv, quitBtn)
     setInterval(function(){incrementSeconds(timer.innerText, timer)}, 1000)
-
 }
