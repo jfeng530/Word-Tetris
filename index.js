@@ -113,7 +113,7 @@ async function fetchWords(words) {
 function renderGame(words){
     mainCtn.innerHTML = ""
     statDiv.innerHTML = ""
-    
+
     // creates game DOM
     let gameDiv = document.createElement('div')
     gameDiv.id = "game-container"
@@ -149,6 +149,8 @@ function renderGame(words){
         // checks input with 'lowest' word
         if (event.target.word.value === items[0].firstElementChild.innerText) {
             score.innerText = parseInt(score.innerText) + word.value.length
+            items[0].dataset.id = 1
+            // debugger
             items[0].remove()
             inputField.reset()
         }
@@ -156,7 +158,7 @@ function renderGame(words){
             inputField.reset()
         }
     })
-    
+
 
     scoreDiv.append(scoreLabel, score)
     timeDiv.append(timerLabel, timer)
@@ -185,23 +187,23 @@ function rainWord(word, gameDiv, inputField, score, wordInt, cancelTimer) {
     wordDiv.append(wordSpan)
     gameDiv.append(wordDiv)
     myMove(wordDiv, gameDiv, wordInt, cancelTimer, inputField, wordSpan, score)
-    
+
     console.log(word)
 }
 
 // rain word
-function myMove(wordDiv, gameDiv, wordInt, cancelTimer, inputField, wordSpan, score) {  
+function myMove(wordDiv, gameDiv, wordInt, cancelTimer, inputField, wordSpan, score) {
     wordDiv.style.left = (Math.floor(Math.random() * 450))
     let pos = 0
     let id = setInterval(frame, 5)
 
     function frame() {
-      if (pos == 500) {
+      if (wordDiv.style.top == "500px" && wordDiv.dataset.id != 1) {
         clearInterval(id)
         endGame(wordInt, cancelTimer)
       } else {
-        pos++ 
-        wordDiv.style.top = pos + "px" 
+        pos++
+        wordDiv.style.top = pos + "px"
       }
     }
 }
