@@ -76,6 +76,7 @@ playBtn.addEventListener('click', () => {
     userInput.id = 'user-input'
     let startBtn = document.createElement('button')
     startBtn.innerText = "Start"
+
     startBtn.addEventListener('click', (event) => {
         let user = event.target.previousElementSibling.value
         fetchWords(wordsArr)
@@ -119,7 +120,10 @@ function renderGame(words){
     let quitBtn = document.createElement('button')
     quitBtn.innerText = 'Quit'
     quitBtn.className = 'btn btn-danger'
-    let inputField = document.createElement('input')
+    let inputField = document.createElement('form')
+    inputField.innerHTML = `<input id='word' type='text'>
+    <input type='submit'>
+    `
     let timeDiv = document.createElement('div')
     let scoreDiv = document.createElement('div')
     let timerLabel = document.createElement('h3')
@@ -138,14 +142,61 @@ function renderGame(words){
     statDiv.append(scoreDiv, timeDiv, quitBtn)
 
     // timer
-    setInterval(function(){incrementSeconds(timer.innerText, timer)}, 1000)
+    var cancelTimer = setInterval(function(){incrementSeconds(timer.innerText, timer)}, 1000)
 
+    // randomize words array
     shuffle(words)
 
-    setInterval(function(){rainWord(words[Math.floor(Math.random() * words.length)])}, 2000)
+    // runs rainWord on 2 second intervals
+    var wordInt = setInterval(function(){rainWord( words[Math.floor(Math.random() * words.length)] , gameDiv, inputField, score, wordInt, cancelTimer)}, 2000)
 }
 
-// rain down a word
-function rainWord(word) {
+// put 'word' into a 'div'
+function rainWord(word, gameDiv, inputField, score, wordInt, cancelTimer) {
+    let wordDiv = document.createElement('div')
+    wordDiv.id = 'word-animate'
+    let wordSpan = document.createElement('span')
+    wordSpan.innerText = word
+    wordSpan.style = `color: white`
+    wordDiv.append(wordSpan)
+    gameDiv.append(wordDiv)
+    myMove(wordDiv, gameDiv, wordInt, cancelTimer)
+    // eventListner on form
+    inputField.addEventListener('submit', (event) => {
+        event.preventDefault()
+        if (event.target.word.value === word) {
+            score.innerText = parseInt(score.innerText) + word.length
+            wordDiv.remove()
+            inputField.reset()
+        }
+    })
     console.log(word)
+}
+
+// rain word
+function myMove(wordDiv, gameDiv, wordInt, cancelTimer) {  
+    wordDiv.style.left = (Math.floor(Math.random() * 450))
+    let pos = 0;
+    let id = setInterval(frame, 5);
+    function frame() {
+      if (pos == 500) {
+        clearInterval(id)
+      } else {
+        pos++ 
+        wordDiv.style.top = pos + "px" 
+        if (wordDiv.style.top == `500px`){
+            clearInterval(id)
+            endGame(wordInt, cancelTimer)
+        }
+      }
+    }
+}
+
+function endGame(wordInt, cancelTimer) {
+    clearInterval(wordInt)
+    clearInterval(cancelTimer)
+    statDiv.innerHTML = ""
+    mainCtn.innerHTML = `<h1>Welcome</h1>
+    <img src="">
+    <p>Rules: Testing</p>`
 }

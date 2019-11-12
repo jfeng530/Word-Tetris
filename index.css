@@ -1,0 +1,16 @@
+#game-container {
+    width: 550px;
+    height: 550px;
+    position: relative;
+    background: #a1a19a;
+}
+
+#word-animate {
+    width: 100px;
+    height: 50px;
+    border-radius: 50% / 10%;
+    position: absolute;
+    text-align: center;
+    background-color: blue;
+
+}
