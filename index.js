@@ -182,8 +182,13 @@ function renderGame(words){
         // checks input with 'lowest' word
         if (event.target.word.value === items[0].firstElementChild.innerText) {
             score.innerText = parseInt(score.innerText) + word.value.length
-            items[0].dataset.id = 1
-            items[0].remove()
+            // debugger
+            animateCSS(items[0], 'bounceOutUp', function() {
+                // Do something after animation
+                items[0].dataset.id = 1
+                items[0].remove()
+              })
+            // remove animation
             inputField.reset()
         }
         else {
@@ -270,4 +275,18 @@ function endGame() {
     .then(gameObj => {
         renderHighScore(gameObj)
     })
+}
+
+function animateCSS(element, animationName, callback) {
+    node = element
+    node.classList.add('animated', animationName)
+
+    function handleAnimationEnd() {
+        node.classList.remove('animated', animationName)
+        node.removeEventListener('animationend', handleAnimationEnd)
+
+        if (typeof callback === 'function') callback()
+    }
+
+    node.addEventListener('animationend', handleAnimationEnd)
 }

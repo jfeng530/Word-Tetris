@@ -14,3 +14,9 @@
     background-color: blue;
 
 }
+
+.animate
+{
+    height: 0px;
+    transition: height 1s;
+}
