@@ -2,26 +2,29 @@ let playBtn = document.getElementById('play-btn')
 let mainCtn = document.getElementById('main-container')
 let hsBtn = document.getElementById('hs-btn')
 let homeBtn = document.getElementById('home-btn')
+let statDiv = document.getElementById('stat-container')
 let url = 'https://newsapi.org/v2/top-headlines?' +
           'country=us&' +
           'apiKey=277ca875809f4f6484e5d830b2158bef'
 
 let wordsArr = []
 
-//eventListener for 'Home'
+// eventListener for 'Home'
 homeBtn.addEventListener('click', () => {
+    statDiv.innerHTML = ""
     mainCtn.innerHTML = `<h1>Welcome</h1>
     <img src="">
     <p>Rules: Testing</p>`
 })
 
-//eventListener for 'High Score'
+// eventListener for 'High Score'
 hsBtn.addEventListener('click', () => {
     renderHighScore()
 })
 
 // change DOM for 'High Score'
 function renderHighScore() {
+    statDiv.innerHTML = ""
     mainCtn.innerHTML = ""
     let timeDiv = document.createElement('div')
     let timeOl = document.createElement('ol')
@@ -58,16 +61,25 @@ function renderHighScore() {
 // eventListener for 'Play'
 playBtn.addEventListener('click', () => {
     mainCtn.innerHTML = ""
+    statDiv.innerHTML = ""
+    let playDiv = document.createElement('div')
+    playDiv.className = 'card-body'
+
     let inputLabel = document.createElement('h2')
     inputLabel.innerText = "Enter a username: "
     let userInput = document.createElement('input')
     userInput.id = 'user-input'
     let startBtn = document.createElement('button')
     startBtn.innerText = "Start"
-    startBtn.addEventListener('click', () => {
+    startBtn.addEventListener('click', (event) => {
+        let user = event.target.previousElementSibling.value
         fetchWords(wordsArr)
     })
-    mainCtn.append(inputLabel, userInput, startBtn)
+
+    playDiv.append(inputLabel, userInput, startBtn)
+    mainCtn.append(playDiv)
+
+
 })
 
 // helper function for timer
@@ -94,9 +106,11 @@ async function fetchWords(words) {
 // render the game
 function renderGame(words){
     mainCtn.innerHTML = ""
+    statDiv.innerHTML = ""
 
     // creates game DOM
     let gameDiv = document.createElement('div')
+    gameDiv.id = "game-container"
     let quitBtn = document.createElement('button')
     quitBtn.innerText = 'Quit'
     quitBtn.className = 'btn btn-danger'
@@ -114,7 +128,9 @@ function renderGame(words){
 
     scoreDiv.append(scoreLabel, score)
     timeDiv.append(timerLabel, timer)
-    
-    mainCtn.append(gameDiv, inputField, timeDiv, scoreDiv, quitBtn)
+
+    mainCtn.append(gameDiv, inputField)
+    statDiv.append(scoreDiv, timeDiv, quitBtn)
+
     setInterval(function(){incrementSeconds(timer.innerText, timer)}, 1000)
 }
