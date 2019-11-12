@@ -32,9 +32,11 @@ function renderHighScore() {
     statDiv.innerHTML = ""
     mainCtn.innerHTML = ""
     let timeDiv = document.createElement('div')
+    timeDiv.setAttribute('class', 'float-left')
     let timeOl = document.createElement('ol')
     timeDiv.append(timeOl)
     let scoreDiv = document.createElement('div')
+    scoreDiv.setAttribute('class', 'float-right')
     let scoreOl = document.createElement('ol')
     scoreDiv.append(scoreOl)
 
@@ -44,7 +46,9 @@ function renderHighScore() {
     .then(gamesArr => {
         gamesArr.forEach(game => {
             let gameLi = document.createElement('li')
-            gameLi.innerText = `${game.user.username} Time: ${game.time}`
+            let gameH5 = document.createElement('h5')
+            gameH5.innerText = `${game.user.username} Time: ${game.time}`
+            gameLi.append(gameH5)
             timeOl.append(gameLi)
         })
     })
@@ -55,7 +59,9 @@ function renderHighScore() {
     .then(gamesArr => {
         gamesArr.forEach(game => {
             let gameLi = document.createElement('li')
-            gameLi.innerText = `${game.user.username} Score: ${game.score}`
+            let gameH5 = document.createElement('h5')
+            gameH5.innerText = `${game.user.username} Score: ${game.score}`
+            gameLi.append(gameH5)
             scoreOl.append(gameLi)
         })
     })
