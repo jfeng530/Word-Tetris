@@ -9,6 +9,11 @@ let url = 'https://newsapi.org/v2/top-headlines?' +
 
 let wordsArr = []
 
+// shuffles array
+function shuffle(array) {
+    array.sort(() => Math.random() - 0.5);
+  }
+
 // eventListener for 'Home'
 homeBtn.addEventListener('click', () => {
     statDiv.innerHTML = ""
@@ -107,7 +112,7 @@ async function fetchWords(words) {
 function renderGame(words){
     mainCtn.innerHTML = ""
     statDiv.innerHTML = ""
-
+    
     // creates game DOM
     let gameDiv = document.createElement('div')
     gameDiv.id = "game-container"
@@ -132,5 +137,15 @@ function renderGame(words){
     mainCtn.append(gameDiv, inputField)
     statDiv.append(scoreDiv, timeDiv, quitBtn)
 
+    // timer
     setInterval(function(){incrementSeconds(timer.innerText, timer)}, 1000)
+
+    shuffle(words)
+
+    setInterval(function(){rainWord(words[Math.floor(Math.random() * words.length)])}, 2000)
+}
+
+// rain down a word
+function rainWord(word) {
+    console.log(word)
 }
