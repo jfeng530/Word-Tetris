@@ -183,9 +183,9 @@ function renderGame(words){
         if (event.target.word.value === items[0].firstElementChild.innerText) {
             score.innerText = parseInt(score.innerText) + word.value.length
             // debugger
-            animateCSS(items[0], 'bounceOutUp', function() {
+            items[0].dataset.id = 1
+            animateCSS(items[0], 'fadeOutUpBig', function() {
                 // Do something after animation
-                items[0].dataset.id = 1
                 items[0].remove()
               })
             // remove animation
