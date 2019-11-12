@@ -182,20 +182,17 @@ function renderGame(words){
         // checks input with 'lowest' word
         if (event.target.word.value === items[0].firstElementChild.innerText) {
             score.innerText = parseInt(score.innerText) + word.value.length
-            // debugger
             items[0].dataset.id = 1
+            // remove animation
             animateCSS(items[0], 'fadeOutUpBig', function() {
-                // Do something after animation
                 items[0].remove()
               })
-            // remove animation
             inputField.reset()
         }
         else {
             inputField.reset()
         }
     })
-
 
     scoreDiv.append(scoreLabel, score)
     timeDiv.append(timerLabel, timer)
@@ -234,6 +231,7 @@ function rainWord(word, gameDiv, inputField, score, wordInt, cancelTimer) {
 function myMove(wordDiv, gameDiv, wordInt, cancelTimer) {
     wordDiv.style.left = (Math.floor(Math.random() * 450))
     let pos = 0
+    // speed
     let id = setInterval(frame, 10)
 
     function frame() {
@@ -277,6 +275,7 @@ function endGame() {
     })
 }
 
+// helper function for animation
 function animateCSS(element, animationName, callback) {
     node = element
     node.classList.add('animated', animationName)
