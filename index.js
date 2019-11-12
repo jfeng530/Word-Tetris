@@ -1,3 +1,4 @@
+console.log("hi mf")
 let playBtn = document.getElementById('play-btn')
 let mainCtn = document.getElementById('main-container')
 let hsBtn = document.getElementById('hs-btn')
@@ -193,7 +194,9 @@ function renderGame(words){
 
     scoreDiv.append(scoreLabel, score)
     timeDiv.append(timerLabel, timer)
-
+    mainCtn.setAttribute('class', 'float-left')
+    statDiv.setAttribute('class', 'float-right')
+    statDiv.setAttribute('style', 'padding-left: 100px;')
     mainCtn.append(gameDiv, inputField)
     statDiv.prepend(scoreDiv, timeDiv, quitBtn)
 
