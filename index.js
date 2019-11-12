@@ -121,7 +121,7 @@ async function fetchWords(words) {
     response.articles.forEach(article => {
         if (article.description != null) {
             article.description.split(" ").forEach(word => {
-                word = word.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"")
+                word = word.replace(/[.,\/#!'"$%\^&\*;:{}=\-_`~()]/g,"")
                 words.push(word.toLowerCase())
             })
         }
