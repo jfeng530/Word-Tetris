@@ -135,6 +135,29 @@ function renderGame(words){
     let score = document.createElement('h3')
     score.innerText = 0
 
+    // eventListener for inputField
+    inputField.addEventListener('submit', (event) => {
+        event.preventDefault()
+
+        // gets & sorts the words by lowest
+        let wordContainers = document.getElementsByClassName('word-container')
+        let items = Array.prototype.slice.call(wordContainers)
+        items.sort(function(a, b){
+            return a.style.top - b.style.top
+        })
+
+        // checks input with 'lowest' word
+        if (event.target.word.value === items[0].firstElementChild.innerText) {
+            score.innerText = parseInt(score.innerText) + word.value.length
+            items[0].remove()
+            inputField.reset()
+        }
+        else {
+            inputField.reset()
+        }
+    })
+    
+
     scoreDiv.append(scoreLabel, score)
     timeDiv.append(timerLabel, timer)
 
@@ -155,48 +178,40 @@ function renderGame(words){
 function rainWord(word, gameDiv, inputField, score, wordInt, cancelTimer) {
     let wordDiv = document.createElement('div')
     wordDiv.id = 'word-animate'
+    wordDiv.className = 'word-container'
     let wordSpan = document.createElement('span')
     wordSpan.innerText = word
     wordSpan.style = `color: white`
     wordDiv.append(wordSpan)
     gameDiv.append(wordDiv)
-    myMove(wordDiv, gameDiv, wordInt, cancelTimer)
-    // eventListner on form
-    inputField.addEventListener('submit', (event) => {
-        event.preventDefault()
-        if (event.target.word.value === word) {
-            score.innerText = parseInt(score.innerText) + word.length
-            wordDiv.remove()
-            inputField.reset()
-        }
-    })
+    myMove(wordDiv, gameDiv, wordInt, cancelTimer, inputField, wordSpan, score)
+    
     console.log(word)
 }
 
 // rain word
-function myMove(wordDiv, gameDiv, wordInt, cancelTimer) {  
+function myMove(wordDiv, gameDiv, wordInt, cancelTimer, inputField, wordSpan, score) {  
     wordDiv.style.left = (Math.floor(Math.random() * 450))
-    let pos = 0;
-    let id = setInterval(frame, 5);
+    let pos = 0
+    let id = setInterval(frame, 5)
+
     function frame() {
       if (pos == 500) {
         clearInterval(id)
+        endGame(wordInt, cancelTimer)
       } else {
         pos++ 
         wordDiv.style.top = pos + "px" 
-        if (wordDiv.style.top == `500px`){
-            clearInterval(id)
-            endGame(wordInt, cancelTimer)
-        }
       }
     }
 }
 
 function endGame(wordInt, cancelTimer) {
-    clearInterval(wordInt)
-    clearInterval(cancelTimer)
-    statDiv.innerHTML = ""
-    mainCtn.innerHTML = `<h1>Welcome</h1>
-    <img src="">
-    <p>Rules: Testing</p>`
+    // clearInterval(wordInt)
+    // clearInterval(cancelTimer)
+    // statDiv.innerHTML = ""
+    // mainCtn.innerHTML = `<h1>Welcome</h1>
+    // <img src="">
+    // <p>Rules: Testing</p>`
+    console.log('bottom')
 }
