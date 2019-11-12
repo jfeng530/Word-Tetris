@@ -79,6 +79,21 @@ playBtn.addEventListener('click', () => {
 
     startBtn.addEventListener('click', (event) => {
         let user = event.target.previousElementSibling.value
+        fetch("http://localhost:3000/users", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json"
+          },
+          body: JSON.stringify({
+            username: user
+          })
+        })
+        .then(r => r.json())
+        .then(r => {
+          // user return value
+        })
+
         fetchWords(wordsArr)
     })
 
@@ -113,6 +128,14 @@ async function fetchWords(words) {
 function renderGame(words){
     mainCtn.innerHTML = ""
     statDiv.innerHTML = ""
+    // getting latest user has been created
+    fetch("http://localhost:3000/users")
+    .then(r => r.json())
+    .then(r => {
+      let userLabel = document.createElement('h3')
+      userLabel.innerText = r[r.length - 1].username
+      statDiv.append(userLabel)
+    })
 
     // creates game DOM
     let gameDiv = document.createElement('div')
@@ -164,7 +187,7 @@ function renderGame(words){
     timeDiv.append(timerLabel, timer)
 
     mainCtn.append(gameDiv, inputField)
-    statDiv.append(scoreDiv, timeDiv, quitBtn)
+    statDiv.prepend(scoreDiv, timeDiv, quitBtn)
 
     // timer
     var cancelTimer = setInterval(function(){incrementSeconds(timer.innerText, timer)}, 1000)
@@ -195,7 +218,7 @@ function rainWord(word, gameDiv, inputField, score, wordInt, cancelTimer) {
 function myMove(wordDiv, gameDiv, wordInt, cancelTimer, inputField, wordSpan, score) {
     wordDiv.style.left = (Math.floor(Math.random() * 450))
     let pos = 0
-    let id = setInterval(frame, 5)
+    let id = setInterval(frame, 10)
 
     function frame() {
       if (wordDiv.style.top == "500px" && wordDiv.dataset.id != 1) {
@@ -209,11 +232,11 @@ function myMove(wordDiv, gameDiv, wordInt, cancelTimer, inputField, wordSpan, sc
 }
 
 function endGame(wordInt, cancelTimer) {
-    // clearInterval(wordInt)
-    // clearInterval(cancelTimer)
-    // statDiv.innerHTML = ""
-    // mainCtn.innerHTML = `<h1>Welcome</h1>
-    // <img src="">
-    // <p>Rules: Testing</p>`
+    clearInterval(wordInt)
+    clearInterval(cancelTimer)
+    statDiv.innerHTML = ""
+    mainCtn.innerHTML = `<h1>Welcome</h1>
+    <img src="">
+    <p>Rules: Testing</p>`
     console.log('bottom')
 }
