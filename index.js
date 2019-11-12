@@ -28,7 +28,7 @@ hsBtn.addEventListener('click', () => {
 })
 
 // change DOM for 'High Score'
-function renderHighScore() {
+function renderHighScore(game) {
     statDiv.innerHTML = ""
     mainCtn.innerHTML = ""
     let timeDiv = document.createElement('div')
@@ -112,7 +112,6 @@ playBtn.addEventListener('click', () => {
 // helper function for timer
 function incrementSeconds(seconds, timer){
     timer.innerText = parseInt(seconds) + 1
-    console.log("test")
 }
 
 // fetching words before start of game
@@ -122,7 +121,8 @@ async function fetchWords(words) {
     response.articles.forEach(article => {
         if (article.description != null) {
             article.description.split(" ").forEach(word => {
-                words.push(word)
+                word = word.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"")
+                words.push(word.toLowerCase())
             })
         }
     })
@@ -139,8 +139,9 @@ function renderGame(words){
     .then(r => r.json())
     .then(r => {
       let userLabel = document.createElement('h3')
+      userLabel.dataset.id = r[r.length-1].id
       userLabel.innerText = r[r.length - 1].username
-      statDiv.append(userLabel)
+      statDiv.prepend(userLabel)
     })
 
     // creates game DOM
@@ -154,7 +155,9 @@ function renderGame(words){
     <input type='submit'>
     `
     let timeDiv = document.createElement('div')
+    timeDiv.id = 'time'
     let scoreDiv = document.createElement('div')
+    scoreDiv.id = 'score'
     let timerLabel = document.createElement('h3')
     timerLabel.innerText = "Time: "
     let scoreLabel = document.createElement('h3')
@@ -179,7 +182,6 @@ function renderGame(words){
         if (event.target.word.value === items[0].firstElementChild.innerText) {
             score.innerText = parseInt(score.innerText) + word.value.length
             items[0].dataset.id = 1
-            // debugger
             items[0].remove()
             inputField.reset()
         }
@@ -221,15 +223,23 @@ function rainWord(word, gameDiv, inputField, score, wordInt, cancelTimer) {
 }
 
 // rain word
-function myMove(wordDiv, gameDiv, wordInt, cancelTimer, inputField, wordSpan, score) {
+function myMove(wordDiv, gameDiv, wordInt, cancelTimer) {
     wordDiv.style.left = (Math.floor(Math.random() * 450))
     let pos = 0
     let id = setInterval(frame, 10)
 
     function frame() {
       if (wordDiv.style.top == "500px" && wordDiv.dataset.id != 1) {
+        console.log('bottom')
+        let wordContainers = document.getElementsByClassName('word-container')
+        let items = Array.prototype.slice.call(wordContainers)
+        items.forEach(item => {
+            item.dataset.id = 1
+        })
         clearInterval(id)
-        endGame(wordInt, cancelTimer)
+        clearInterval(wordInt)
+        clearInterval(cancelTimer)
+        endGame()
       } else {
         pos++
         wordDiv.style.top = pos + "px"
@@ -237,12 +247,24 @@ function myMove(wordDiv, gameDiv, wordInt, cancelTimer, inputField, wordSpan, sc
     }
 }
 
-function endGame(wordInt, cancelTimer) {
-    clearInterval(wordInt)
-    clearInterval(cancelTimer)
-    statDiv.innerHTML = ""
-    mainCtn.innerHTML = `<h1>Welcome</h1>
-    <img src="">
-    <p>Rules: Testing</p>`
-    console.log('bottom')
+function endGame() {
+    let score = document.getElementById('score').lastElementChild.innerText
+    let time = document.getElementById('time').lastElementChild.innerText
+    let userId = document.getElementById('stat-container').firstElementChild.dataset.id
+    fetch('http://localhost:3000/games', {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+        },
+        body: JSON.stringify({
+            time: time,
+            score: score,
+            user_id: userId
+        })
+    })
+    .then(r => r.json())
+    .then(gameObj => {
+        renderHighScore(gameObj)
+    })
 }
