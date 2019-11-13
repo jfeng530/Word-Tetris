@@ -97,6 +97,7 @@ playBtn.addEventListener('click', () => {
     let inputLabel = document.createElement('h2')
     inputLabel.innerText = "Enter a username: "
     let userInput = document.createElement('input')
+    userInput.className = "form-control"
     userInput.id = 'user-input'
     userInput.setAttribute('required', '')
     let startBtn = document.createElement('button')
@@ -127,7 +128,6 @@ playBtn.addEventListener('click', () => {
     startGameForm.append(inputLabel, userInput, br, br3, br2, diffDiv, startBtn)
     playDiv.append(startGameForm)
     mainCtn.append(playDiv)
-
     startGameForm.addEventListener('submit', (event) => {
         event.preventDefault()
         let user = document.getElementById('user-input').value
@@ -192,42 +192,42 @@ function renderGame(words, diff){
     gameDiv.id = "game-container"
     let quitBtn = document.createElement('button')
     quitBtn.innerText = 'Quit'
-    quitBtn.className = 'btn btn-danger'
+    quitBtn.className = 'btn btn-danger form-control'
     quitBtn.id = 'quit'
     let inputField = document.createElement('form')
-    inputField.innerHTML = `<input id='word' type='text'>
+    inputField.innerHTML = `<input id='word' class="form-control" type='text'>
     <input type='submit'>`
     let timeDiv = document.createElement('div')
     timeDiv.id = 'time'
+    timeDiv.setAttribute('class', 'card border-primary mb-3')
     let scoreDiv = document.createElement('div')
+    scoreDiv.setAttribute('class', 'card border-success mb-3')
     scoreDiv.id = 'score'
-    scoreDiv.className = 'card border-success shadow mb-3'
 
     // individual body for time card
     let timeCardBody = document.createElement('div')
+    timeCardBody.className = 'card border-primary'
 
     let timerLabel = document.createElement('h2')
     timerLabel.className = 'card-title text-white bg-primary mb-3'
     timerLabel.innerText = "Time: "
-    timerLabel.style = 'text-align: center;'
     let timer = document.createElement('h2')
     timer.id = 'time'
     timer.className = 'card-text'
-    timer.innerText = 25
+    timer.innerText = 0
     timer.style = 'text-align: center; padding: 3px 0;'
 
     // individual body for score card
     let scoreCardBody = document.createElement('div')
-
+    scoreCardBody.className = 'card border-success'
     let scoreLabel = document.createElement('h2')
     scoreLabel.className = 'card-title text-white bg-success mb-3'
     scoreLabel.innerText = "Score: "
-    scoreLabel.style = 'text-align: center;'
 
     let score = document.createElement('h2')
     score.className = 'card-text'
+    score.style = 'text-align: center !important;'
     score.innerText = 0
-
     // eventListener for inputField
     inputField.addEventListener('submit', (event) => {
         event.preventDefault()
@@ -263,6 +263,7 @@ function renderGame(words, diff){
     statDiv.setAttribute('style', 'padding-left: 100px;')
     mainCtn.append(gameDiv, inputField)
     statDiv.prepend(scoreDiv, timeDiv, quitBtn)
+    // debugger
 
     // timer
     var cancelTimer = setInterval(function(){incrementSeconds(timer.innerText, timer)}, 1000)

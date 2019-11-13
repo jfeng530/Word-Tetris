@@ -16,19 +16,25 @@
       opacity:0.7 !important;
     }
 </style>
-  <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom" style="height: 25px;">
-  </nav>
-  <div class="d-flex">
+  <div class="d-flex" style="height: 100% !important">
 
     <!-- Sidebar -->
+    <style>
+      .sidebar-heading{
+        padding: 0.875rem 1.25rem;
+        font-size: 1.2rem;
+      }
+      .list-group-item{
+         padding: 0.75em 1em !important;
+         padding-right: 5em !important;
+      }
+      .card{
+        width: 500 !important;
+      }
+    </style>
       <div class="bg-light border-right" id="sidebar-wrapper">
+        <div class="sidebar-heading">Word Tetris</div>
         <div class="list-group list-group-flush">
-          <style>
-            .list-group-item{
-               padding: 0.75em 1em !important;
-               padding-right: 5em !important;
-            }
-          </style>
           <button id="home-btn" class="list-group-item list-group-item-action bg-light">Home<i class="fa fa-home pl-5"></i></button>
           <button id="play-btn" class="list-group-item list-group-item-action bg-light">Play<i class="fa fa-play pl-5"></i></button>
           <button id="hs-btn" class="list-group-item list-group-item-action bg-light">High Score<i class="pl-2 fa fa-hand-spock-o"></i></button>
@@ -62,9 +68,9 @@
               </button>
             </div>
             <div class="modal-body">
-              <h2>Rank: <span id="time-rank-stat"></span></h3>
+              <h2>Rank in Time: <span id="time-rank-stat"></span></h3>
               <h4>Time: <span id="time-stat"></span></h4>
-              <h2>Rank: <span id="score-rank-stat"></span></h3>
+              <h2>Rank in Score: <span id="score-rank-stat"></span></h3>
               <h4>Score: <span id="score-stat"></span></h4>
             </div>
             <div class="modal-footer">
