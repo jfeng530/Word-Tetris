@@ -10,7 +10,12 @@
   <script defer type="text/javascript" src="index.js"></script>
 </head>
 
-<body>
+<body id="pageContent">
+  <style>
+    .modal-backdrop{
+      opacity:0.7 !important;
+    }
+</style>
   <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom" style="height: 25px;">
   </nav>
   <div class="d-flex">
@@ -44,19 +49,22 @@
       </div>
     </div>
     <!-- Modal for Finishing Game  -->
-    <button type="button" id="modal-button" data-toggle="modal" data-target="#exampleModalCenter" data-backdrop="static" data-keyboard="false">Launch modal</button>
+    <button type="button" style="display: none !important;" id="modal-button" data-toggle="modal" data-target="#exampleModalCenter" data-backdrop="static" data-keyboard="false">Launch modal</button>
 
     <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+              <h2 class="modal-title" id="exampleModalLongTitle">Your Stats</h2>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
             <div class="modal-body">
-              ...
+              <h3>rank: <span id="time-rank-stat"></span></h3>
+              <h4>time: <span id="time-stat"></span></h4>
+              <h3>rank: <span id="score-rank-stat"></span></h3>
+              <h4>score: <span id="score-stat"></span></h4>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Continue</button>

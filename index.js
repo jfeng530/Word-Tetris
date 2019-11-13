@@ -41,11 +41,13 @@ function renderHighScore(game) {
     scoreDiv.append(scoreOl)
 
     // get/display best time
-    fetch('http://localhost:3000/games?time=longest')
+   fetch('http://localhost:3000/games?time=longest')
     .then(r => r.json())
     .then(gamesArr => {
         gamesArr.forEach(game => {
             let gameLi = document.createElement('li')
+            gameLi.setAttribute('id', game.id + 'time')
+            gameLi.dataset.idx = gamesArr.indexOf(game) + 1
             let gameH5 = document.createElement('h5')
             gameH5.innerText = `${game.user.username} Time: ${game.time}`
             gameLi.append(gameH5)
@@ -60,6 +62,8 @@ function renderHighScore(game) {
         gamesArr.forEach(game => {
             let gameLi = document.createElement('li')
             let gameH5 = document.createElement('h5')
+            gameLi.setAttribute('id', game.id + 'score')
+            gameLi.dataset.idx = gamesArr.indexOf(game) + 1
             gameH5.innerText = `${game.user.username} Score: ${game.score}`
             gameLi.append(gameH5)
             scoreOl.append(gameLi)
@@ -235,10 +239,10 @@ function renderGame(words, diff){
     let speed
     switch(diff) {
         case 'Easy':
-            speed = 3000
+            speed = 2750
             break
         case 'Medium':
-            speed = 2000
+            speed = 1750
             break
         case 'Hard':
             speed = 1500
@@ -332,10 +336,17 @@ function endGame() {
     })
     .then(r => r.json())
     .then(gameObj => {
-      console.log(gameObj)
         // where we put the modal
-        let modalBtn = document.getElementById('modal-button')
+        console.log(gameObj)
         renderHighScore(gameObj)
+        let modalBtn = document.getElementById('modal-button')
+        let gameTime = document.getElementById(gameObj.id + 'time')
+        let gameScore = document.getElementById(gameObj.id + 'score')
+        debugger
+        document.getElementById('time-stat').innerText = gameObj.time
+        document.getElementById('time-rank-stat').innerText = gameTime.dataset.idx
+        document.getElementById('score-stat').innerText = gameObj.time
+        document.getElementById('score-rank-stat').innerText = gameScore.dataset.idx
         modalBtn.click()
     })
 }
