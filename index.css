@@ -2,7 +2,7 @@
     width: 550px;
     height: 550px;
     position: relative;
-    background: #a1a19a;
+    background: hsl(60, 6%, 82%);
 }
 
 #word-animate {
@@ -12,4 +12,6 @@
     position: absolute;
     text-align: center;
     background-color: blue;
+    padding: 10px;
+    margin: 10px;
 }
