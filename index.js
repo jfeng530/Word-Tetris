@@ -28,7 +28,7 @@ hsBtn.addEventListener('click', () => {
 })
 
 // change DOM for 'High Score'
-function renderHighScore(game) {
+function renderHighScore(gameObj) {
     statDiv.innerHTML = ""
     mainCtn.innerHTML = ""
     let timeDiv = document.createElement('div')
@@ -41,7 +41,9 @@ function renderHighScore(game) {
     scoreDiv.append(scoreOl)
 
     // get/display best time
-   fetch('http://localhost:3000/games?time=longest')
+    let modalBtn = document.getElementById('modal-button')
+
+    fetch('http://localhost:3000/games?time=longest')
     .then(r => r.json())
     .then(gamesArr => {
         gamesArr.forEach(game => {
@@ -53,6 +55,11 @@ function renderHighScore(game) {
             gameLi.append(gameH5)
             timeOl.append(gameLi)
         })
+        if( gameObj ){
+          let gameTime = document.getElementById(gameObj.id + 'time')
+          document.getElementById('time-stat').innerText = gameObj.time
+          document.getElementById('time-rank-stat').innerText = gameTime.dataset.idx
+        }
     })
 
     // get/display best scores
@@ -68,6 +75,12 @@ function renderHighScore(game) {
             gameLi.append(gameH5)
             scoreOl.append(gameLi)
         })
+        if( gameObj ){
+          let gameScore = document.getElementById(gameObj.id + 'score')
+          document.getElementById('score-stat').innerText = gameObj.score
+          document.getElementById('score-rank-stat').innerText = gameScore.dataset.idx
+          modalBtn.click()
+        }
     })
     mainCtn.append(timeDiv, scoreDiv)
 }
@@ -181,43 +194,19 @@ function renderGame(words, diff){
     let inputField = document.createElement('form')
     inputField.innerHTML = `<input id='word' type='text'>
     <input type='submit'>`
-
-    // card column container
-    let statCardCol = document.createElement('div')
-    statCardCol.className = 'card-columns'
-
-    // individual cards for time and score
     let timeDiv = document.createElement('div')
     timeDiv.id = 'time'
-    timeDiv.className = 'card border-primary shadow mb-3'
     let scoreDiv = document.createElement('div')
     scoreDiv.id = 'score'
-    scoreDiv.className = 'card border-success shadow mb-3'
-
-    // individual body for time card
-    let timeCardBody = document.createElement('div')
-
     let timerLabel = document.createElement('h3')
-    timerLabel.className = 'card-title text-white bg-primary mb-3'
     timerLabel.innerText = "Time: "
-    timerLabel.style = 'text-align: center;'
-    let timer = document.createElement('h3')
-    timer.className = 'card-text'
-    timer.innerText = 0
-    timer.style = 'text-align: center; padding: 3px 0;'
-
-    // individual body for score card
-    let scoreCardBody = document.createElement('div')
-
     let scoreLabel = document.createElement('h3')
-    scoreLabel.className = 'card-title text-white bg-success mb-3'
     scoreLabel.innerText = "Score: "
-    scoreLabel.style = 'text-align: center;'
-
+    let timer = document.createElement('h3')
+    timer.innerText = 0
     let score = document.createElement('h3')
-    score.className = 'card-text'
     score.innerText = 0
-    score.style = 'text-align: center; padding: 3px 0;'
+
     // eventListener for inputField
     inputField.addEventListener('submit', (event) => {
         event.preventDefault()
@@ -245,17 +234,13 @@ function renderGame(words, diff){
         }
     })
 
-    statCardCol.append(scoreDiv, timeDiv)
-
     scoreDiv.append(scoreLabel, score)
     timeDiv.append(timerLabel, timer)
-
     mainCtn.setAttribute('class', 'float-left')
     statDiv.setAttribute('class', 'float-right')
     statDiv.setAttribute('style', 'padding-left: 100px;')
     mainCtn.append(gameDiv, inputField)
-
-    statDiv.prepend(statCardCol, quitBtn)
+    statDiv.prepend(scoreDiv, timeDiv, quitBtn)
 
     // timer
     var cancelTimer = setInterval(function(){incrementSeconds(timer.innerText, timer)}, 1000)
@@ -267,10 +252,10 @@ function renderGame(words, diff){
     let speed
     switch(diff) {
         case 'Easy':
-            speed = 2000
+            speed = 2750
             break
         case 'Medium':
-            speed = 1500
+            speed = 1750
             break
         case 'Hard':
             speed = 1500
@@ -285,10 +270,9 @@ function rainWord(word, gameDiv, score, wordInt, cancelTimer, diff) {
 
     let wordDiv = document.createElement('div')
     wordDiv.id = 'word-animate'
-    wordDiv.className = 'word-container shadow-lg p-3 mb-5'
+    wordDiv.className = 'word-container'
     let wordSpan = document.createElement('span')
     wordSpan.innerText = word
-    wordSpan.className = 'text-center'
     wordSpan.style = `color: white`
     wordDiv.append(wordSpan)
     gameDiv.append(wordDiv)
@@ -368,15 +352,6 @@ function endGame() {
         // where we put the modal
         console.log(gameObj)
         renderHighScore(gameObj)
-        let modalBtn = document.getElementById('modal-button')
-        let gameTime = document.getElementById(gameObj.id + 'time')
-        let gameScore = document.getElementById(gameObj.id + 'score')
-        debugger
-        document.getElementById('time-stat').innerText = gameObj.time
-        document.getElementById('time-rank-stat').innerText = gameTime.dataset.idx
-        document.getElementById('score-stat').innerText = gameObj.time
-        document.getElementById('score-rank-stat').innerText = gameScore.dataset.idx
-        modalBtn.click()
     })
 }
 
