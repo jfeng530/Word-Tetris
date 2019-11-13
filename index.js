@@ -245,7 +245,7 @@ function renderGame(words, diff){
         }
     })
 
-    statCardCol.append(scoreDiv, timeDiv)
+    statCardCol.append(scoreDiv, timeDiv, quitBtn)
 
     scoreDiv.append(scoreLabel, score)
     timeDiv.append(timerLabel, timer)
@@ -255,7 +255,7 @@ function renderGame(words, diff){
     statDiv.setAttribute('style', 'padding-left: 100px;')
     mainCtn.append(gameDiv, inputField)
 
-    statDiv.prepend(statCardCol, quitBtn)
+    statDiv.prepend(statCardCol)
 
     // timer
     var cancelTimer = setInterval(function(){incrementSeconds(timer.innerText, timer)}, 1000)
@@ -282,7 +282,7 @@ function renderGame(words, diff){
 
 // put 'word' into a 'div'
 function rainWord(word, gameDiv, score, wordInt, cancelTimer, diff) {
-
+    debugger
     let wordDiv = document.createElement('div')
     wordDiv.id = 'word-animate'
     wordDiv.className = 'word-container'
