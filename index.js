@@ -98,6 +98,7 @@ playBtn.addEventListener('click', () => {
     inputLabel.innerText = "Enter a username: "
     let userInput = document.createElement('input')
     userInput.id = 'user-input'
+    userInput.setAttribute('required', '')
     let startBtn = document.createElement('button')
     startBtn.type = 'submit'
     startBtn.className = 'btn btn-primary'
@@ -288,7 +289,7 @@ function renderGame(words, diff){
     intArray.push(wordInt)
     function increaseSpeed() {
         let currentTime = document.getElementById('time')
-    
+
         if (parseInt(currentTime.innerText.slice(6)) == 30) {
             // debugger
             clearInterval(wordInt)
@@ -362,7 +363,7 @@ function myMove(wordDiv, wordInt, cancelTimer, diff, fast, faster, fastest) {
         let items = Array.prototype.slice.call(wordContainers)
         items.forEach(item => {
             item.dataset.id = 1
-        })     
+        })
         intArray.forEach(clearInterval);
         endGame()
       } else {
