@@ -181,19 +181,43 @@ function renderGame(words, diff){
     let inputField = document.createElement('form')
     inputField.innerHTML = `<input id='word' type='text'>
     <input type='submit'>`
+
+    // card column container
+    let statCardCol = document.createElement('div')
+    statCardCol.className = 'card-columns'
+
+    // individual cards for time and score
     let timeDiv = document.createElement('div')
     timeDiv.id = 'time'
+    timeDiv.className = 'card border-primary shadow mb-3'
     let scoreDiv = document.createElement('div')
     scoreDiv.id = 'score'
-    let timerLabel = document.createElement('h3')
-    timerLabel.innerText = "Time: "
-    let scoreLabel = document.createElement('h3')
-    scoreLabel.innerText = "Score: "
-    let timer = document.createElement('h3')
-    timer.innerText = 0
-    let score = document.createElement('h3')
-    score.innerText = 0
+    scoreDiv.className = 'card border-success shadow mb-3'
 
+    // individual body for time card
+    let timeCardBody = document.createElement('div')
+
+    let timerLabel = document.createElement('h3')
+    timerLabel.className = 'card-title text-white bg-primary mb-3'
+    timerLabel.innerText = "Time: "
+    timerLabel.style = 'text-align: center;'
+    let timer = document.createElement('h3')
+    timer.className = 'card-text'
+    timer.innerText = 0
+    timer.style = 'text-align: center; padding: 3px 0;'
+
+    // individual body for score card
+    let scoreCardBody = document.createElement('div')
+
+    let scoreLabel = document.createElement('h3')
+    scoreLabel.className = 'card-title text-white bg-success mb-3'
+    scoreLabel.innerText = "Score: "
+    scoreLabel.style = 'text-align: center;'
+
+    let score = document.createElement('h3')
+    score.className = 'card-text'
+    score.innerText = 0
+    score.style = 'text-align: center; padding: 3px 0;'
     // eventListener for inputField
     inputField.addEventListener('submit', (event) => {
         event.preventDefault()
@@ -221,13 +245,17 @@ function renderGame(words, diff){
         }
     })
 
+    statCardCol.append(scoreDiv, timeDiv)
+
     scoreDiv.append(scoreLabel, score)
     timeDiv.append(timerLabel, timer)
+
     mainCtn.setAttribute('class', 'float-left')
     statDiv.setAttribute('class', 'float-right')
     statDiv.setAttribute('style', 'padding-left: 100px;')
     mainCtn.append(gameDiv, inputField)
-    statDiv.prepend(scoreDiv, timeDiv, quitBtn)
+
+    statDiv.prepend(statCardCol, quitBtn)
 
     // timer
     var cancelTimer = setInterval(function(){incrementSeconds(timer.innerText, timer)}, 1000)
@@ -239,10 +267,10 @@ function renderGame(words, diff){
     let speed
     switch(diff) {
         case 'Easy':
-            speed = 2750
+            speed = 2000
             break
         case 'Medium':
-            speed = 1750
+            speed = 1500
             break
         case 'Hard':
             speed = 1500
@@ -257,9 +285,10 @@ function rainWord(word, gameDiv, score, wordInt, cancelTimer, diff) {
 
     let wordDiv = document.createElement('div')
     wordDiv.id = 'word-animate'
-    wordDiv.className = 'word-container'
+    wordDiv.className = 'word-container shadow-lg p-3 mb-5'
     let wordSpan = document.createElement('span')
     wordSpan.innerText = word
+    wordSpan.className = 'text-center'
     wordSpan.style = `color: white`
     wordDiv.append(wordSpan)
     gameDiv.append(wordDiv)
