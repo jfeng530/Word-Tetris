@@ -1,4 +1,3 @@
-console.log("hi mf")
 let playBtn = document.getElementById('play-btn')
 let mainCtn = document.getElementById('main-container')
 let hsBtn = document.getElementById('hs-btn')
@@ -66,7 +65,6 @@ function renderHighScore(game) {
             scoreOl.append(gameLi)
         })
     })
-
     mainCtn.append(timeDiv, scoreDiv)
 }
 
@@ -76,9 +74,7 @@ playBtn.addEventListener('click', () => {
     statDiv.innerHTML = ""
     let playDiv = document.createElement('div')
     playDiv.className = 'card-body'
-
     let startGameForm = document.createElement('form')
-
     let inputLabel = document.createElement('h2')
     inputLabel.innerText = "Enter a username: "
     let userInput = document.createElement('input')
@@ -87,18 +83,6 @@ playBtn.addEventListener('click', () => {
     startBtn.type = 'submit'
     startBtn.className = 'btn btn-primary'
     startBtn.innerText = "Start"
-
-    // <div class="form-group">
-    //   <label for="exampleFormControlSelect1">Example select</label>
-    //   <select class="form-control" id="exampleFormControlSelect1">
-    //     <option>1</option>
-    //     <option>2</option>
-    //     <option>3</option>
-    //     <option>4</option>
-    //     <option>5</option>
-    //   </select>
-    // </div>
-
     let diffDiv = document.createElement('div')
     diffDiv.className = 'form-group'
     let diffLabel = document.createElement('label')
@@ -115,20 +99,6 @@ playBtn.addEventListener('click', () => {
     hard.innerText = 'Hard'
     diffSelect.append(easy, medium, hard)
     diffDiv.append(diffLabel, diffSelect)
-
-    // let easy = document.createElement('div')
-    // easy.className ='form-check form-check-inline'
-    // easy.innerHTML = `<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="Easy">
-    // <label class="form-check-label" for="inlineRadio1">Easy</label>`
-    // let medium = document.createElement('div')
-    // medium.className ='form-check form-check-inline'
-    // medium.innerHTML = `<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="Medium">
-    // <label class="form-check-label" for="inlineRadio1">Medium</label>`
-    // let hard = document.createElement('div')
-    // hard.className ='form-check form-check-inline'
-    // hard.innerHTML = `<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="Hard">
-    // <label class="form-check-label" for="inlineRadio1">Hard</label>`
-
 
     let br = document.createElement('br')
     let br2 = document.createElement('br')
@@ -156,11 +126,8 @@ playBtn.addEventListener('click', () => {
         .then(r => {
           // user return value
         })
-
         fetchWords(wordsArr, diff)
     })
-
-
 })
 
 // helper function for timer
@@ -238,7 +205,8 @@ function renderGame(words, diff){
         if (event.target.word.value === items[0].firstElementChild.innerText) {
             score.innerText = parseInt(score.innerText) + word.value.length
             items[0].dataset.id = 1
-            // remove animation
+            
+            // 'remove' animation (animation taking too long, fast typers can't elimate next word)
             animateCSS(items[0], 'fadeOutUpBig', function() {
                 items[0].remove()
               })
@@ -263,10 +231,8 @@ function renderGame(words, diff){
     // randomize words array
     shuffle(words)
 
-    // runs rainWord on 2 second intervals
-
+    // sets speed of rainWord
     let speed
-
     switch(diff) {
         case 'Easy':
             speed = 3000
@@ -305,9 +271,8 @@ function myMove(wordDiv, wordInt, cancelTimer, diff) {
     wordDiv.style.left = (Math.floor(Math.random() * 450))
     let pos = 0
 
-    // speed
+    // set speed of falling down action
     let speed
-
     switch(diff) {
         case 'Easy':
             speed = 15
@@ -320,6 +285,7 @@ function myMove(wordDiv, wordInt, cancelTimer, diff) {
             break
     }
     let id = setInterval(frame, speed)
+
     // quit functionality
     let quitBtn = document.getElementById('quit')
     quitBtn.addEventListener('click', () => {
@@ -373,10 +339,10 @@ function endGame() {
 // helper function for animation
 function animateCSS(element, animationName, callback) {
     node = element
-    node.classList.add('animated', animationName)
+    node.classList.add('animated', animationName, 'faster')
 
     function handleAnimationEnd() {
-        node.classList.remove('animated', animationName)
+        node.classList.remove('animated', animationName, 'faster')
         node.removeEventListener('animationend', handleAnimationEnd)
 
         if (typeof callback === 'function') callback()
@@ -384,3 +350,4 @@ function animateCSS(element, animationName, callback) {
 
     node.addEventListener('animationend', handleAnimationEnd)
 }
+
