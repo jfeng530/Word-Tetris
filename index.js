@@ -197,11 +197,11 @@ function renderGame(words, diff){
     // individual body for time card
     let timeCardBody = document.createElement('div')
 
-    let timerLabel = document.createElement('h3')
+    let timerLabel = document.createElement('h2')
     timerLabel.className = 'card-title text-white bg-primary mb-3'
     timerLabel.innerText = "Time: "
     timerLabel.style = 'text-align: center;'
-    let timer = document.createElement('h3')
+    let timer = document.createElement('h2')
     timer.className = 'card-text'
     timer.innerText = 0
     timer.style = 'text-align: center; padding: 3px 0;'
@@ -209,12 +209,12 @@ function renderGame(words, diff){
     // individual body for score card
     let scoreCardBody = document.createElement('div')
 
-    let scoreLabel = document.createElement('h3')
+    let scoreLabel = document.createElement('h2')
     scoreLabel.className = 'card-title text-white bg-success mb-3'
     scoreLabel.innerText = "Score: "
     scoreLabel.style = 'text-align: center;'
 
-    let score = document.createElement('h3')
+    let score = document.createElement('h2')
     score.className = 'card-text'
     score.innerText = 0
     score.style = 'text-align: center; padding: 3px 0;'
@@ -285,11 +285,11 @@ function rainWord(word, gameDiv, score, wordInt, cancelTimer, diff) {
 
     let wordDiv = document.createElement('div')
     wordDiv.id = 'word-animate'
-    wordDiv.className = 'word-container shadow-lg p-3 mb-5'
-    let wordSpan = document.createElement('span')
+    wordDiv.className = 'word-container'
+    let wordSpan = document.createElement('h3')
     wordSpan.innerText = word
-    wordSpan.className = 'text-center'
-    wordSpan.style = `color: white`
+    wordSpan.className = 'text-container'
+    // wordSpan.style = `color: white;`
     wordDiv.append(wordSpan)
     gameDiv.append(wordDiv)
 
