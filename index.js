@@ -185,7 +185,7 @@ function renderGame(words, diff){
     // individual cards for time and score
     let timeDiv = document.createElement('div')
     timeDiv.id = 'time'
-    timeDiv.className = 'card border-primary shadow mb-3 '
+    timeDiv.className = 'card border-primary shadow mb-3'
     let scoreDiv = document.createElement('div')
     scoreDiv.id = 'score'
     scoreDiv.className = 'card border-success shadow mb-3'
@@ -278,7 +278,7 @@ function renderGame(words, diff){
 
 // put 'word' into a 'div'
 function rainWord(word, gameDiv, score, wordInt, cancelTimer, diff) {
-    debugger
+    
     let wordDiv = document.createElement('div')
     wordDiv.id = 'word-animate'
     wordDiv.className = 'word-container shadow-lg p-3 mb-5'
