@@ -103,11 +103,11 @@ playBtn.addEventListener('click', () => {
     let br = document.createElement('br')
     let br2 = document.createElement('br')
     let br3 = document.createElement('br')
-    
+
     startGameForm.append(inputLabel, userInput, br, br3, br2, diffDiv, startBtn)
     playDiv.append(startGameForm)
     mainCtn.append(playDiv)
-    
+
     startGameForm.addEventListener('submit', (event) => {
         event.preventDefault()
         let user = document.getElementById('user-input').value
@@ -137,7 +137,7 @@ function incrementSeconds(seconds, timer){
 
 // fetching words before start of game
 async function fetchWords(words, diff) {
-    
+
     let res = await fetch(url)
     let response = await res.json()
     response.articles.forEach(article => {
@@ -154,7 +154,7 @@ async function fetchWords(words, diff) {
 
 // render the game
 function renderGame(words, diff){
-    
+
     mainCtn.innerHTML = ""
     statDiv.innerHTML = ""
     // getting latest user has been created
@@ -229,7 +229,7 @@ function renderGame(words, diff){
         if (event.target.word.value === items[0].firstElementChild.innerText) {
             score.innerText = parseInt(score.innerText) + word.value.length
             items[0].dataset.id = 1
-            
+
             // 'remove' animation (animation taking too long, fast typers can't elimate next word)
             animateCSS(items[0], 'fadeOutUpBig', function() {
                 items[0].remove()
@@ -268,7 +268,7 @@ function renderGame(words, diff){
         case 'Medium':
             speed = 1500
             break
-        case 'Hard': 
+        case 'Hard':
             speed = 1500
             break
     }
@@ -309,7 +309,7 @@ function myMove(wordDiv, wordInt, cancelTimer, diff) {
         case 'Medium':
             speed = 8
             break
-        case 'Hard': 
+        case 'Hard':
             speed = 5
             break
     }
@@ -361,7 +361,11 @@ function endGame() {
     })
     .then(r => r.json())
     .then(gameObj => {
+      console.log(gameObj)
+        // where we put the modal
+        let modalBtn = document.getElementById('modal-button')
         renderHighScore(gameObj)
+        modalBtn.click()
     })
 }
 
@@ -379,4 +383,3 @@ function animateCSS(element, animationName, callback) {
 
     node.addEventListener('animationend', handleAnimationEnd)
 }
-
