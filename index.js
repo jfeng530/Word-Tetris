@@ -9,6 +9,8 @@ let url = 'https://newsapi.org/v2/top-headlines?' +
 
 let wordsArr = []
 
+let intArray = []
+
 // shuffles array
 function shuffle(array) {
     array.sort(() => Math.random() - 0.5);
@@ -208,8 +210,9 @@ function renderGame(words, diff){
     timerLabel.innerText = "Time: "
     timerLabel.style = 'text-align: center;'
     let timer = document.createElement('h2')
+    timer.id = 'time'
     timer.className = 'card-text'
-    timer.innerText = 0
+    timer.innerText = 25
     timer.style = 'text-align: center; padding: 3px 0;'
 
     // individual body for score card
@@ -249,6 +252,7 @@ function renderGame(words, diff){
         else {
             inputField.reset()
         }
+
     })
 
     scoreDiv.append(scoreLabel, score)
@@ -261,7 +265,7 @@ function renderGame(words, diff){
 
     // timer
     var cancelTimer = setInterval(function(){incrementSeconds(timer.innerText, timer)}, 1000)
-
+    intArray.push(cancelTimer)
     // randomize words array
     shuffle(words)
 
@@ -279,12 +283,32 @@ function renderGame(words, diff){
             break
     }
 
-    var wordInt = setInterval(function(){rainWord( words[Math.floor(Math.random() * words.length)] , gameDiv, score, wordInt, cancelTimer, diff)}, speed)
+    // check time
+    var wordInt = setInterval(function(){rainWord( words[Math.floor(Math.random() * words.length)] , gameDiv, score, wordInt, cancelTimer, diff, fast)}, speed)
+    intArray.push(wordInt)
+    function increaseSpeed() {
+        let currentTime = document.getElementById('time')
+    
+        if (parseInt(currentTime.innerText.slice(6)) == 30) {
+            // debugger
+            clearInterval(wordInt)
+            var faster = setInterval(function(){rainWord( words[Math.floor(Math.random() * words.length)] , gameDiv, score, wordInt, cancelTimer, diff, fast, faster, fastest)}, (speed - 500))
+            intArray.push(faster)
+        } else if (parseInt(currentTime.innerText.slice(6)) ==  60) {
+            clearInterval(faster)
+            var fastest = setInterval(function(){rainWord( words[Math.floor(Math.random() * words.length)] , gameDiv, score, wordInt, cancelTimer, diff, fast, faster, fastest)}, (speed - 1000))
+            intArray.push(fastest)
+        }
+    }
+
+    var fast = setInterval(increaseSpeed, 500)
+    intArray.push(fast)
+
 }
 
 // put 'word' into a 'div'
-function rainWord(word, gameDiv, score, wordInt, cancelTimer, diff) {
-    debugger
+function rainWord(word, gameDiv, score, wordInt, cancelTimer, diff, fast, faster, fastest) {
+    // debugger
     let wordDiv = document.createElement('div')
     wordDiv.id = 'word-animate'
     wordDiv.className = 'word-container'
@@ -295,13 +319,13 @@ function rainWord(word, gameDiv, score, wordInt, cancelTimer, diff) {
     wordDiv.append(wordSpan)
     gameDiv.append(wordDiv)
 
-    myMove(wordDiv, wordInt, cancelTimer, diff)
+    myMove(wordDiv, wordInt, cancelTimer, diff, fast, faster, fastest)
 
     console.log(word)
 }
 
 // rain word
-function myMove(wordDiv, wordInt, cancelTimer, diff) {
+function myMove(wordDiv, wordInt, cancelTimer, diff, fast, faster, fastest) {
 
     wordDiv.style.left = (Math.floor(Math.random() * 450))
     let pos = 0
@@ -320,15 +344,16 @@ function myMove(wordDiv, wordInt, cancelTimer, diff) {
             break
     }
     let id = setInterval(frame, speed)
+    intArray.push(id)
 
     // quit functionality
     let quitBtn = document.getElementById('quit')
-    quitBtn.addEventListener('click', () => {
-        clearInterval(id)
-        clearInterval(wordInt)
-        clearInterval(cancelTimer)
-        endGame()
-    })
+    if (quitBtn) {
+        quitBtn.addEventListener('click', () => {
+            intervals.forEach(clearInterval);
+            endGame()
+        })
+    }
 
     function frame() {
       if (wordDiv.style.top == "500px" && wordDiv.dataset.id != 1) {
@@ -337,10 +362,8 @@ function myMove(wordDiv, wordInt, cancelTimer, diff) {
         let items = Array.prototype.slice.call(wordContainers)
         items.forEach(item => {
             item.dataset.id = 1
-        })
-        clearInterval(id)
-        clearInterval(wordInt)
-        clearInterval(cancelTimer)
+        })     
+        intArray.forEach(clearInterval);
         endGame()
       } else {
         pos++
@@ -353,6 +376,7 @@ function endGame() {
     let score = document.getElementById('score').lastElementChild.innerText
     let time = document.getElementById('time').lastElementChild.innerText
     let userId = document.getElementById('stat-container').firstElementChild.dataset.id
+
     fetch('http://localhost:3000/games', {
         method: "POST",
         headers: {
