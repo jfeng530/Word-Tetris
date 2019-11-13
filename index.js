@@ -77,15 +77,71 @@ playBtn.addEventListener('click', () => {
     let playDiv = document.createElement('div')
     playDiv.className = 'card-body'
 
+    let startGameForm = document.createElement('form')
+
     let inputLabel = document.createElement('h2')
     inputLabel.innerText = "Enter a username: "
     let userInput = document.createElement('input')
     userInput.id = 'user-input'
     let startBtn = document.createElement('button')
+    startBtn.type = 'submit'
+    startBtn.className = 'btn btn-primary'
     startBtn.innerText = "Start"
 
-    startBtn.addEventListener('click', (event) => {
-        let user = event.target.previousElementSibling.value
+    // <div class="form-group">
+    //   <label for="exampleFormControlSelect1">Example select</label>
+    //   <select class="form-control" id="exampleFormControlSelect1">
+    //     <option>1</option>
+    //     <option>2</option>
+    //     <option>3</option>
+    //     <option>4</option>
+    //     <option>5</option>
+    //   </select>
+    // </div>
+
+    let diffDiv = document.createElement('div')
+    diffDiv.className = 'form-group'
+    let diffLabel = document.createElement('label')
+    diffLabel.setAttribute('for', 'difficulty')
+    diffLabel.innerHTML = `Choose a Difficulty:`
+    let diffSelect = document.createElement('select')
+    diffSelect.id = 'difficulty'
+    diffSelect.className = 'form-control'
+    let easy = document.createElement('option')
+    easy.innerText = 'Easy'
+    let medium = document.createElement('option')
+    medium.innerText = 'Medium'
+    let hard = document.createElement('option')
+    hard.innerText = 'Hard'
+    diffSelect.append(easy, medium, hard)
+    diffDiv.append(diffLabel, diffSelect)
+
+    // let easy = document.createElement('div')
+    // easy.className ='form-check form-check-inline'
+    // easy.innerHTML = `<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="Easy">
+    // <label class="form-check-label" for="inlineRadio1">Easy</label>`
+    // let medium = document.createElement('div')
+    // medium.className ='form-check form-check-inline'
+    // medium.innerHTML = `<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="Medium">
+    // <label class="form-check-label" for="inlineRadio1">Medium</label>`
+    // let hard = document.createElement('div')
+    // hard.className ='form-check form-check-inline'
+    // hard.innerHTML = `<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="Hard">
+    // <label class="form-check-label" for="inlineRadio1">Hard</label>`
+
+
+    let br = document.createElement('br')
+    let br2 = document.createElement('br')
+    let br3 = document.createElement('br')
+    
+    startGameForm.append(inputLabel, userInput, br, br3, br2, diffDiv, startBtn)
+    playDiv.append(startGameForm)
+    mainCtn.append(playDiv)
+    
+    startGameForm.addEventListener('submit', (event) => {
+        event.preventDefault()
+        let user = document.getElementById('user-input').value
+        let diff = event.target.difficulty.value
         fetch("http://localhost:3000/users", {
           method: "POST",
           headers: {
@@ -101,11 +157,8 @@ playBtn.addEventListener('click', () => {
           // user return value
         })
 
-        fetchWords(wordsArr)
+        fetchWords(wordsArr, diff)
     })
-
-    playDiv.append(inputLabel, userInput, startBtn)
-    mainCtn.append(playDiv)
 
 
 })
@@ -116,7 +169,8 @@ function incrementSeconds(seconds, timer){
 }
 
 // fetching words before start of game
-async function fetchWords(words) {
+async function fetchWords(words, diff) {
+    
     let res = await fetch(url)
     let response = await res.json()
     response.articles.forEach(article => {
@@ -128,11 +182,12 @@ async function fetchWords(words) {
         }
     })
     // starts game
-    renderGame(words)
+    renderGame(words, diff)
 }
 
 // render the game
-function renderGame(words){
+function renderGame(words, diff){
+    
     mainCtn.innerHTML = ""
     statDiv.innerHTML = ""
     // getting latest user has been created
@@ -151,10 +206,10 @@ function renderGame(words){
     let quitBtn = document.createElement('button')
     quitBtn.innerText = 'Quit'
     quitBtn.className = 'btn btn-danger'
+    quitBtn.id = 'quit'
     let inputField = document.createElement('form')
     inputField.innerHTML = `<input id='word' type='text'>
-    <input type='submit'>
-    `
+    <input type='submit'>`
     let timeDiv = document.createElement('div')
     timeDiv.id = 'time'
     let scoreDiv = document.createElement('div')
@@ -209,11 +264,27 @@ function renderGame(words){
     shuffle(words)
 
     // runs rainWord on 2 second intervals
-    var wordInt = setInterval(function(){rainWord( words[Math.floor(Math.random() * words.length)] , gameDiv, inputField, score, wordInt, cancelTimer)}, 2000)
+
+    let speed
+
+    switch(diff) {
+        case 'Easy':
+            speed = 3000
+            break
+        case 'Medium':
+            speed = 2000
+            break
+        case 'Hard': 
+            speed = 1500
+            break
+    }
+
+    var wordInt = setInterval(function(){rainWord( words[Math.floor(Math.random() * words.length)] , gameDiv, score, wordInt, cancelTimer, diff)}, speed)
 }
 
 // put 'word' into a 'div'
-function rainWord(word, gameDiv, inputField, score, wordInt, cancelTimer) {
+function rainWord(word, gameDiv, score, wordInt, cancelTimer, diff) {
+    
     let wordDiv = document.createElement('div')
     wordDiv.id = 'word-animate'
     wordDiv.className = 'word-container'
@@ -222,17 +293,41 @@ function rainWord(word, gameDiv, inputField, score, wordInt, cancelTimer) {
     wordSpan.style = `color: white`
     wordDiv.append(wordSpan)
     gameDiv.append(wordDiv)
-    myMove(wordDiv, gameDiv, wordInt, cancelTimer, inputField, wordSpan, score)
+
+    myMove(wordDiv, wordInt, cancelTimer, diff)
 
     console.log(word)
 }
 
 // rain word
-function myMove(wordDiv, gameDiv, wordInt, cancelTimer) {
+function myMove(wordDiv, wordInt, cancelTimer, diff) {
+
     wordDiv.style.left = (Math.floor(Math.random() * 450))
     let pos = 0
+
     // speed
-    let id = setInterval(frame, 10)
+    let speed
+
+    switch(diff) {
+        case 'Easy':
+            speed = 15
+            break
+        case 'Medium':
+            speed = 8
+            break
+        case 'Hard': 
+            speed = 5
+            break
+    }
+    let id = setInterval(frame, speed)
+    // quit functionality
+    let quitBtn = document.getElementById('quit')
+    quitBtn.addEventListener('click', () => {
+        clearInterval(id)
+        clearInterval(wordInt)
+        clearInterval(cancelTimer)
+        endGame()
+    })
 
     function frame() {
       if (wordDiv.style.top == "500px" && wordDiv.dataset.id != 1) {

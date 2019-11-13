@@ -12,11 +12,4 @@
     position: absolute;
     text-align: center;
     background-color: blue;
-
-}
-
-.animate
-{
-    height: 0px;
-    transition: height 1s;
 }
