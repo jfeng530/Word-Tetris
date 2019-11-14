@@ -44,3 +44,8 @@ h3 {
     color: white;
     text-shadow: 0 0 15px rgba(255,255,255,.5), 0 0 10px rgba(255,255,255,.5);
   }
+
+@font-face{
+  font-family:'digital-clock-font';
+  src: url('./digital-7.regular.ttf');
+}
