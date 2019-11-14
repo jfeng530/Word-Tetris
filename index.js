@@ -8,7 +8,7 @@ let url = 'https://newsapi.org/v2/top-headlines?' +
           'apiKey=277ca875809f4f6484e5d830b2158bef'
 
 let wordsArr = []
-
+let gamesTimeArr = []
 let intArray = []
 
 // shuffles array
@@ -46,9 +46,12 @@ function renderHighScore(gameObj) {
     // get/display best time
     let modalBtn = document.getElementById('modal-button')
 
-    fetch('http://localhost:3000/games?time=longest')
+    fetch('http://localhost:3000/games')
     .then(r => r.json())
     .then(gamesArr => {
+        gamesArr.sort(function(a, b) {
+          return b.time - a.time
+        });
         gamesArr.forEach(game => {
             let gameLi = document.createElement('li')
             gameLi.setAttribute('id', game.id + 'time')
@@ -170,9 +173,28 @@ playBtn.addEventListener('click', () => {
     })
 })
 
+
 // helper function for timer
 function incrementSeconds(seconds, timer){
+    let timerRank = document.getElementById('time-rank-2')
     timer.innerText = parseInt(seconds) + 1
+    // changing real-time rank for user - TIME
+    gamesTimeArr.push(parseInt(seconds))
+    gamesTimeArr.sort(function(a, b) {
+      return b - a
+    });
+    let index = gamesTimeArr.indexOf(parseInt(seconds))
+
+    // testing purpose
+      // console.log(parseInt(seconds))
+      // console.log(index)
+      // console.log(gamesTimeArr)
+
+    timerRank.innerText = index
+
+    if (index > -1) {
+       gamesTimeArr.splice(index, 1);
+    }
 }
 
 // fetching words before start of game
@@ -213,6 +235,14 @@ function renderGame(words, diff){
       statDiv.prepend(userLabel)
     })
 
+    // getting all games to show current rank in real-time
+    fetch("http://localhost:3000/games")
+    .then(r => r.json())
+    .then(r =>{
+      r.forEach(el => {
+        gamesTimeArr.push(el.time)
+      })
+    })
     // creates game DOM
     let gameDiv = document.createElement('div')
     gameDiv.id = "game-container"
@@ -240,10 +270,15 @@ function renderGame(words, diff){
     timerLabel.className = 'card-title text-white bg-primary mb-3'
     timerLabel.innerText = "Time: "
     let timer = document.createElement('h2')
-    timer.id = 'time'
+    timer.id = 'time-second'
     timer.className = 'card-text'
     timer.innerText = 0
     timer.style = 'text-align: center; padding: 3px 0;'
+    // current-rank time
+    let timerRank = document.createElement('h5')
+    timerRank.className = 'card-text'
+    timerRank.style = 'text-align: center; padding: 3px 0;'
+    timerRank.innerHTML = "your current rank in time: <span id='time-rank-2'> </span>"
 
     // individual body for score card
     let scoreCardBody = document.createElement('div')
@@ -271,7 +306,8 @@ function renderGame(words, diff){
         if (event.target.word.value.replace(/\s/g, "") === items[0].firstElementChild.innerText) {
             score.innerText = parseInt(score.innerText) + word.value.length
             items[0].dataset.id = 1
-
+            // changing real-time rank for user - SCORE
+            // gamesTimeArr.push(parseInt())
             // 'remove' animation (animation taking too long, fast typers can't elimate next word)
             animateCSS(items[0], 'fadeOutUpBig', function() {
                 items[0].remove()
@@ -284,12 +320,13 @@ function renderGame(words, diff){
 
     })
     scoreDiv.append(scoreLabel, score)
-    timeDiv.append(timerLabel, timer)
+    timeDiv.append(timerLabel, timer, timerRank)
     mainCtn.setAttribute('class', 'float-left')
     statDiv.setAttribute('class', 'float-right')
     statDiv.setAttribute('style', 'padding-left: 100px;')
     mainCtn.append(gameDiv, inputField)
     statDiv.prepend(scoreDiv, timeDiv, quitBtn)
+    debugger
     // auto-click on input inputField
     let inputTag = document.getElementById('word')
     inputTag.focus()
@@ -418,9 +455,9 @@ function myMove(wordDiv, wordInt, cancelTimer, diff, fast, faster, fastest) {
 
 function endGame() {
     let score = document.getElementById('score').lastElementChild.innerText
-    let time = document.getElementById('time').lastElementChild.innerText
+    let time = document.getElementById('time-second').innerText
     let userId = document.getElementById('stat-container').firstElementChild.dataset.id
-    // debugger
+    debugger
     fetch('http://localhost:3000/games', {
         method: "POST",
         headers: {
