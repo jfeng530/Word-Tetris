@@ -4,7 +4,14 @@
     position: relative;
     background: black;
 }
-
+.footer{
+  position: relative;
+  height: 500px;
+}
+.img-bottom{
+  position: absolute;
+  bottom: 5px;
+}
 .rank-list{
  border: 1px solid black;
  width: 550px;

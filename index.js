@@ -22,12 +22,14 @@ homeBtn.addEventListener('click', () => {
     statDiv.innerHTML = ""
     mainCtn.innerHTML = `<h1>Welcome</h1>
     <p>Rules: See how fast you can type! Enter the right word before the word touches the bottom.</p>
-    <br>
-    <br>
-    <h2> languages and frameworks that we used on this project; </h2><br>
-    <img width="100px" class="pl-4" src="./JavaScript-logo.png">
-    <img width="200px" class="pl-4" src="./rails.png">
-    <img width="100px" class="pl-4" src="./bootstrap.png">`
+    <div class="footer">
+      <div class="img-bottom">
+      <h2> languages and frameworks that we used on this project: </h2><br>
+      <img width="100px" class="pl-4" src="./JavaScript-logo.png">
+      <img width="200px" class="pl-4" src="./rails.png">
+      <img width="120px" class="pl-4" src="./bootstrap.png">
+    </div>
+  </div>`
 })
 
 // eventListener for 'High Score'
@@ -39,6 +41,11 @@ hsBtn.addEventListener('click', () => {
 function renderHighScore(gameObj) {
     statDiv.innerHTML = ""
     mainCtn.innerHTML = ""
+
+    // header for h-s page
+    let header = document.createElement('h1')
+    header.innerText = ' -- High Scores and Times -- '
+    header.style = 'text-align: center;'
     let timeDiv = document.createElement('div')
     let timeHead = document.createElement('h2')
     timeHead.innerText = "Time List;"
@@ -112,7 +119,8 @@ function renderHighScore(gameObj) {
             el.firstChild.innerHTML += "<i class='fa fa-first-order pl-4' style='font-size:29px'></i>"
         })
     })
-    mainCtn.append(timeDiv, scoreDiv)
+
+    mainCtn.append(header, timeDiv, scoreDiv)
 }
 
 // eventListener for 'Play'
@@ -200,7 +208,7 @@ function incrementSeconds(seconds, timer){
       // console.log(index)
       // console.log(gamesTimeArr)
 
-    timerRank.innerText = index
+    timerRank.innerText = index + 1
 
     if (index > -1) {
        gamesTimeArr.splice(index, 1);
@@ -348,7 +356,7 @@ function renderGame(words, diff){
             });
             let index = gamesScoreArr.indexOf(parseInt(score.innerText))
 
-            scoreRank.innerText = index
+            scoreRank.innerText = index + 1
 
             if (index > -1) {
                gamesScoreArr.splice(index, 1);
@@ -389,7 +397,7 @@ function renderGame(words, diff){
               })
             inputField.reset()
         }
-        
+
 
     })
     scoreDiv.append(scoreLabel, score, scoreRankDiv)
