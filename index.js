@@ -9,6 +9,7 @@ let url = 'https://newsapi.org/v2/top-headlines?' +
 
 let wordsArr = []
 let gamesTimeArr = []
+let gamesScoreArr = []
 let intArray = []
 
 // shuffles array
@@ -20,8 +21,13 @@ function shuffle(array) {
 homeBtn.addEventListener('click', () => {
     statDiv.innerHTML = ""
     mainCtn.innerHTML = `<h1>Welcome</h1>
-    <img src="">
-    <p>Rules: Testing</p>`
+    <p>Rules: Testing</p>
+    <br>
+    <br>
+    <h2> languages and frameworks that we used on this project; </h2><br>
+    <img width="100px" class="pl-4" src="./JavaScript-logo.png">
+    <img width="200px" class="pl-4" src="./rails.png">
+    <img width="100px" class="pl-4" src="./bootstrap.png">`
 })
 
 // eventListener for 'High Score'
@@ -34,14 +40,18 @@ function renderHighScore(gameObj) {
     statDiv.innerHTML = ""
     mainCtn.innerHTML = ""
     let timeDiv = document.createElement('div')
+    let timeHead = document.createElement('h2')
+    timeHead.innerText = "Time List;"
     timeDiv.setAttribute('class', 'float-left rank-list')
     let timeOl = document.createElement('ol')
 
-    timeDiv.append(timeOl)
+    timeDiv.append(timeHead, timeOl)
     let scoreDiv = document.createElement('div')
+    let scoreHead = document.createElement('h2')
+    scoreHead.innerText = "Score List;"
     scoreDiv.setAttribute('class', 'float-right rank-list')
     let scoreOl = document.createElement('ol')
-    scoreDiv.append(scoreOl)
+    scoreDiv.append(scoreHead, scoreOl)
 
     // get/display best time
     let modalBtn = document.getElementById('modal-button')
@@ -58,7 +68,7 @@ function renderHighScore(gameObj) {
             gameLi.setAttribute('class', 'mt-2')
             gameLi.dataset.idx = gamesArr.indexOf(game) + 1
             let gameH5 = document.createElement('h2')
-            gameH5.innerText = `${game.user.username} Time: ${game.time}`
+            gameH5.innerText = `-- ${game.user.username} -- Time: ${game.time}`
             gameLi.append(gameH5)
             timeOl.append(gameLi)
         })
@@ -84,7 +94,7 @@ function renderHighScore(gameObj) {
             gameLi.setAttribute('class', 'mt-2')
             gameLi.setAttribute('id', game.id + 'score')
             gameLi.dataset.idx = gamesArr.indexOf(game) + 1
-            gameH5.innerText = `${game.user.username} Score: ${game.score}`
+            gameH5.innerText = `-- ${game.user.username} -- Score: ${game.score}`
             gameLi.append(gameH5)
             scoreOl.append(gameLi)
         })
@@ -243,18 +253,28 @@ function renderGame(words, diff){
         gamesTimeArr.push(el.time)
       })
     })
+    fetch("http://localhost:3000/games")
+    .then(r => r.json())
+    .then(r =>{
+      r.forEach(el => {
+        gamesScoreArr.push(el.score)
+      })
+    })
     // creates game DOM
     let gameDiv = document.createElement('div')
     gameDiv.id = "game-container"
     gameDiv.setAttribute('class', 'slow')
+    // quit button
     let quitBtn = document.createElement('button')
     quitBtn.innerText = 'Quit'
     quitBtn.className = 'btn btn-danger form-control'
     quitBtn.id = 'quit'
+    // input field
     let inputField = document.createElement('form')
     inputField.setAttribute('autocomplete', "off")
     inputField.innerHTML = `<input id='word' class="form-control" type='text'>
     <input class="form-control" type='submit'>`
+    // time division
     let timeDiv = document.createElement('div')
     timeDiv.id = 'time'
     timeDiv.setAttribute('class', 'card border-primary mb-3')
@@ -275,10 +295,13 @@ function renderGame(words, diff){
     timer.innerText = 0
     timer.style = 'text-align: center; padding: 3px 0;'
     // current-rank time
-    let timerRank = document.createElement('h5')
+    let timerRankDiv = document.createElement('div')
+    timerRankDiv.className = 'card-footer bg-primary'
+    let timerRank = document.createElement('h4')
     timerRank.className = 'card-text'
-    timerRank.style = 'text-align: center; padding: 3px 0;'
+    timerRank.style = 'text-align: center; padding: 3px 0;color: #ffffff !important;'
     timerRank.innerHTML = "your current rank in time: <span id='time-rank-2'> </span>"
+    timerRankDiv.append(timerRank)
 
     // individual body for score card
     let scoreCardBody = document.createElement('div')
@@ -288,9 +311,18 @@ function renderGame(words, diff){
     scoreLabel.innerText = "Score: "
 
     let score = document.createElement('h2')
+    score.id = "score-2"
     score.className = 'card-text'
     score.style = 'text-align: center !important;'
     score.innerText = 0
+    // current-rank score
+    let scoreRankDiv = document.createElement('div')
+    scoreRankDiv.className = 'card-footer bg-success'
+    let scoreRank = document.createElement('h4')
+    scoreRank.className = 'card-text'
+    scoreRank.style = 'text-align: center; padding: 3px 0;color: #ffffff !important;'
+    scoreRank.innerHTML = "your current rank in score: <span id='score-rank-2'> </span>"
+    scoreRankDiv.append(scoreRank)
     // eventListener for inputField
     inputField.addEventListener('submit', (event) => {
         event.preventDefault()
@@ -307,7 +339,20 @@ function renderGame(words, diff){
             score.innerText = parseInt(score.innerText) + word.value.length
             items[0].dataset.id = 1
             // changing real-time rank for user - SCORE
-            // gamesTimeArr.push(parseInt())
+            let scoreRank = document.getElementById('score-rank-2')
+            scoreRank.innerText = parseInt(score.innerText) + 1
+            // changing real-time rank for user - TIME
+            gamesScoreArr.push(parseInt(score.innerText))
+            gamesScoreArr.sort(function(a, b) {
+              return b - a
+            });
+            let index = gamesScoreArr.indexOf(parseInt(score.innerText))
+
+            scoreRank.innerText = index
+
+            if (index > -1) {
+               gamesScoreArr.splice(index, 1);
+            }
             // 'remove' animation (animation taking too long, fast typers can't elimate next word)
             animateCSS(items[0], 'fadeOutUpBig', function() {
                 items[0].remove()
@@ -315,18 +360,21 @@ function renderGame(words, diff){
             inputField.reset()
         }
         else {
+            animateCSS(items[0], 'shake', function() {
+
+              })
             inputField.reset()
         }
 
     })
-    scoreDiv.append(scoreLabel, score)
-    timeDiv.append(timerLabel, timer, timerRank)
+    scoreDiv.append(scoreLabel, score, scoreRankDiv)
+    timeDiv.append(timerLabel, timer, timerRankDiv)
     mainCtn.setAttribute('class', 'float-left')
     statDiv.setAttribute('class', 'float-right')
     statDiv.setAttribute('style', 'padding-left: 100px;')
     mainCtn.append(gameDiv, inputField)
     statDiv.prepend(scoreDiv, timeDiv, quitBtn)
-    debugger
+    // debugger
     // auto-click on input inputField
     let inputTag = document.getElementById('word')
     inputTag.focus()
@@ -354,15 +402,17 @@ function renderGame(words, diff){
     intArray.push(wordInt)
     // increasing speed based on time
     function increaseSpeed() {
-        let currentTime = document.getElementById('time')
+        let currentTime = document.getElementById('time-second').innerText
+        // debugger
         // checking time with - if else - logic and changing speed based on that
-          if (parseInt(currentTime.innerText.slice(6)) == 30) {
+          if (parseInt(currentTime) == 30) {
+            // debugger
               animateCSS(gameDiv, 'flash', function() {
                 })
               clearInterval(wordInt)
               var faster = setInterval(function(){rainWord( words[Math.floor(Math.random() * words.length)] , gameDiv, score, wordInt, cancelTimer, diff, fast, faster, fastest)}, (speed - 500))
               intArray.push(faster)
-          } else if (parseInt(currentTime.innerText.slice(6)) ==  60) {
+          } else if (parseInt(currentTime) ==  60) {
               // gameDiv.setAttribute('class', 'fast')
               animateCSS(gameDiv, 'jello', function() {
                 })
@@ -454,10 +504,10 @@ function myMove(wordDiv, wordInt, cancelTimer, diff, fast, faster, fastest) {
 }
 
 function endGame() {
-    let score = document.getElementById('score').lastElementChild.innerText
+    let score = document.getElementById('score-2').innerText
     let time = document.getElementById('time-second').innerText
     let userId = document.getElementById('stat-container').firstElementChild.dataset.id
-    debugger
+    // debugger
     fetch('http://localhost:3000/games', {
         method: "POST",
         headers: {
