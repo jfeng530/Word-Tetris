@@ -65,7 +65,7 @@ function renderHighScore(gameObj) {
           document.getElementById('time-rank-stat').innerText = gameTime.dataset.idx
         }
         let firstLis = Array.from(document.querySelectorAll('[data-idx="1"]'))
-        console.log(firstLis)
+        // console.log(firstLis)
         firstLis.forEach(el => {
             el.firstChild.innerHTML += "<i class='fa fa-first-order pl-4' style='font-size:29px'></i>"
           })
@@ -94,7 +94,7 @@ function renderHighScore(gameObj) {
 
         // add icon to 1st users
         let firstLis = Array.from(document.querySelectorAll('[data-idx="1"]'))
-        console.log(firstLis)
+        // console.log(firstLis)
         firstLis.forEach(el => {
             el.firstChild.innerHTML += "<i class='fa fa-first-order pl-4' style='font-size:29px'></i>"
         })
@@ -149,7 +149,7 @@ playBtn.addEventListener('click', () => {
     mainCtn.append(playDiv)
         startGameForm.addEventListener('submit', (event) => {
         event.preventDefault()
-        debugger
+        // debugger
         let user = document.getElementById('user-input').value
         let diff = event.target.difficulty.value
         fetch("http://localhost:3000/users", {
@@ -348,7 +348,7 @@ function rainWord(word, gameDiv, score, wordInt, cancelTimer, diff, fast, faster
     gameDiv.append(wordDiv)
 
     myMove(wordDiv, wordInt, cancelTimer, diff, fast, faster, fastest)
-
+    // showing real-time words
     console.log(word)
 }
 
@@ -414,7 +414,7 @@ function endGame() {
     let score = document.getElementById('score').lastElementChild.innerText
     let time = document.getElementById('time').lastElementChild.innerText
     let userId = document.getElementById('stat-container').firstElementChild.dataset.id
-    debugger
+    // debugger
     fetch('http://localhost:3000/games', {
         method: "POST",
         headers: {
