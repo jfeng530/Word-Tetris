@@ -15,7 +15,7 @@
 .rank-list{
  border: 1px solid black;
  width: 550px;
- height: 700px;
+ height: 500px;
  overflow: scroll;
 }
 
