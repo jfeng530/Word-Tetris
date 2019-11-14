@@ -216,6 +216,7 @@ function renderGame(words, diff){
     // creates game DOM
     let gameDiv = document.createElement('div')
     gameDiv.id = "game-container"
+    gameDiv.setAttribute('class', 'slow')
     let quitBtn = document.createElement('button')
     quitBtn.innerText = 'Quit'
     quitBtn.className = 'btn btn-danger form-control'
@@ -241,7 +242,7 @@ function renderGame(words, diff){
     let timer = document.createElement('h2')
     timer.id = 'time'
     timer.className = 'card-text'
-    timer.innerText = 0
+    timer.innerText = 56
     timer.style = 'text-align: center; padding: 3px 0;'
 
     // individual body for score card
@@ -291,7 +292,7 @@ function renderGame(words, diff){
     statDiv.prepend(scoreDiv, timeDiv, quitBtn)
     // auto-click on input inputField
     let inputTag = document.getElementById('word')
-    inputTag.click()
+    inputTag.focus()
     // timer
     var cancelTimer = setInterval(function(){incrementSeconds(timer.innerText, timer)}, 1000)
     intArray.push(cancelTimer)
@@ -314,19 +315,24 @@ function renderGame(words, diff){
     // check time
     var wordInt = setInterval(function(){rainWord( words[Math.floor(Math.random() * words.length)] , gameDiv, score, wordInt, cancelTimer, diff, fast)}, speed)
     intArray.push(wordInt)
+    // increasing speed based on time
     function increaseSpeed() {
         let currentTime = document.getElementById('time')
-
-        if (parseInt(currentTime.innerText.slice(6)) == 30) {
-            // debugger
-            clearInterval(wordInt)
-            var faster = setInterval(function(){rainWord( words[Math.floor(Math.random() * words.length)] , gameDiv, score, wordInt, cancelTimer, diff, fast, faster, fastest)}, (speed - 500))
-            intArray.push(faster)
-        } else if (parseInt(currentTime.innerText.slice(6)) ==  60) {
-            clearInterval(faster)
-            var fastest = setInterval(function(){rainWord( words[Math.floor(Math.random() * words.length)] , gameDiv, score, wordInt, cancelTimer, diff, fast, faster, fastest)}, (speed - 1000))
-            intArray.push(fastest)
-        }
+        // checking time with - if else - logic and changing speed based on that
+          if (parseInt(currentTime.innerText.slice(6)) == 30) {
+              animateCSS(gameDiv, 'flash', function() {
+                })
+              clearInterval(wordInt)
+              var faster = setInterval(function(){rainWord( words[Math.floor(Math.random() * words.length)] , gameDiv, score, wordInt, cancelTimer, diff, fast, faster, fastest)}, (speed - 500))
+              intArray.push(faster)
+          } else if (parseInt(currentTime.innerText.slice(6)) ==  60) {
+              // gameDiv.setAttribute('class', 'fast')
+              animateCSS(gameDiv, 'jello', function() {
+                })
+              clearInterval(faster)
+              var fastest = setInterval(function(){rainWord( words[Math.floor(Math.random() * words.length)] , gameDiv, score, wordInt, cancelTimer, diff, fast, faster, fastest)}, (speed - 1000))
+              intArray.push(fastest)
+          }
     }
 
     var fast = setInterval(increaseSpeed, 500)
