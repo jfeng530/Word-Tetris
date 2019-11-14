@@ -21,10 +21,10 @@ function shuffle(array) {
 homeBtn.addEventListener('click', () => {
     statDiv.innerHTML = ""
     mainCtn.innerHTML = `<h1>Welcome</h1>
-    <p>Rules: See how fast you can type! Enter the right word before the word touches the bottom.</p>
+    <p>Rules: See how fast you can type! Type the word before it reaches the bottom.</p>
     <br>
     <br>
-    <h2> languages and frameworks that we used on this project; </h2><br>
+    <h2> Languages and frameworks that we used on this project: </h2><br>
     <img width="100px" class="pl-4" src="./JavaScript-logo.png">
     <img width="200px" class="pl-4" src="./rails.png">
     <img width="100px" class="pl-4" src="./bootstrap.png">`
@@ -41,16 +41,19 @@ function renderHighScore(gameObj) {
     mainCtn.innerHTML = ""
     let timeDiv = document.createElement('div')
     let timeHead = document.createElement('h2')
-    timeHead.innerText = "Time List;"
+    timeHead.style = "text-align:center"
+    timeHead.innerText = "Best Times:"
     timeDiv.setAttribute('class', 'float-left rank-list')
     let timeOl = document.createElement('ol')
 
     timeDiv.append(timeHead, timeOl)
     let scoreDiv = document.createElement('div')
     let scoreHead = document.createElement('h2')
-    scoreHead.innerText = "Score List;"
+    scoreHead.innerText = "Best Scores:"
+    scoreHead.style = "text-align:center"
     scoreDiv.setAttribute('class', 'float-right rank-list')
     let scoreOl = document.createElement('ol')
+
     scoreDiv.append(scoreHead, scoreOl)
 
     // get/display best time
@@ -61,7 +64,7 @@ function renderHighScore(gameObj) {
     .then(gamesArr => {
         gamesArr.sort(function(a, b) {
           return b.time - a.time
-        });
+        })
         gamesArr.forEach(game => {
             let gameLi = document.createElement('li')
             gameLi.setAttribute('id', game.id + 'time')
@@ -78,7 +81,7 @@ function renderHighScore(gameObj) {
           document.getElementById('time-rank-stat').innerText = gameTime.dataset.idx
         }
         let firstLis = Array.from(document.querySelectorAll('[data-idx="1"]'))
-        // console.log(firstLis)
+        // Best Time/Score Icon
         firstLis.forEach(el => {
             el.firstChild.innerHTML += "<i class='fa fa-first-order pl-4' style='font-size:29px'></i>"
           })
