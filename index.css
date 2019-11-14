@@ -5,6 +5,25 @@
     background: black;
 }
 
+.rank-list{
+ border: 1px solid black;
+ width: 500px;
+ height: 500px;
+ overflow: scroll;
+}
+
+.sidebar-heading{
+  padding: 0.875rem 1.25rem;
+  font-size: 1.2rem;
+}
+.list-group-item{
+   padding: 0.75em 1em !important;
+   padding-right: 5em !important;
+}
+.card{
+  width: 500 !important;
+}
+
 #word-animate {
     /* width: 100px; */
     /* height: 50px; */

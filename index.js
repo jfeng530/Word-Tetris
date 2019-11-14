@@ -34,11 +34,12 @@ function renderHighScore(gameObj) {
     statDiv.innerHTML = ""
     mainCtn.innerHTML = ""
     let timeDiv = document.createElement('div')
-    timeDiv.setAttribute('class', 'float-left')
+    timeDiv.setAttribute('class', 'float-left rank-list')
     let timeOl = document.createElement('ol')
+
     timeDiv.append(timeOl)
     let scoreDiv = document.createElement('div')
-    scoreDiv.setAttribute('class', 'float-right')
+    scoreDiv.setAttribute('class', 'float-right rank-list')
     let scoreOl = document.createElement('ol')
     scoreDiv.append(scoreOl)
 
@@ -51,8 +52,9 @@ function renderHighScore(gameObj) {
         gamesArr.forEach(game => {
             let gameLi = document.createElement('li')
             gameLi.setAttribute('id', game.id + 'time')
+            gameLi.setAttribute('class', 'mt-2')
             gameLi.dataset.idx = gamesArr.indexOf(game) + 1
-            let gameH5 = document.createElement('h5')
+            let gameH5 = document.createElement('h2')
             gameH5.innerText = `${game.user.username} Time: ${game.time}`
             gameLi.append(gameH5)
             timeOl.append(gameLi)
@@ -62,6 +64,11 @@ function renderHighScore(gameObj) {
           document.getElementById('time-stat').innerText = gameObj.time
           document.getElementById('time-rank-stat').innerText = gameTime.dataset.idx
         }
+        let firstLis = Array.from(document.querySelectorAll('[data-idx="1"]'))
+        console.log(firstLis)
+        firstLis.forEach(el => {
+            el.firstChild.innerHTML += "<i class='fa fa-first-order pl-4' style='font-size:29px'></i>"
+          })
     })
 
     // get/display best scores
@@ -70,7 +77,8 @@ function renderHighScore(gameObj) {
     .then(gamesArr => {
         gamesArr.forEach(game => {
             let gameLi = document.createElement('li')
-            let gameH5 = document.createElement('h5')
+            let gameH5 = document.createElement('h2')
+            gameLi.setAttribute('class', 'mt-2')
             gameLi.setAttribute('id', game.id + 'score')
             gameLi.dataset.idx = gamesArr.indexOf(game) + 1
             gameH5.innerText = `${game.user.username} Score: ${game.score}`
@@ -83,6 +91,13 @@ function renderHighScore(gameObj) {
           document.getElementById('score-rank-stat').innerText = gameScore.dataset.idx
           modalBtn.click()
         }
+
+        // add icon to 1st users
+        let firstLis = Array.from(document.querySelectorAll('[data-idx="1"]'))
+        console.log(firstLis)
+        firstLis.forEach(el => {
+            el.firstChild.innerHTML += "<i class='fa fa-first-order pl-4' style='font-size:29px'></i>"
+        })
     })
     mainCtn.append(timeDiv, scoreDiv)
 }
@@ -98,6 +113,7 @@ playBtn.addEventListener('click', () => {
     inputLabel.innerText = "Enter a username: "
     let userInput = document.createElement('input')
     userInput.className = "form-control"
+    userInput.setAttribute('autocomplete', 'off')
     userInput.id = 'user-input'
     userInput.setAttribute('required', '')
     let startBtn = document.createElement('button')
@@ -113,10 +129,13 @@ playBtn.addEventListener('click', () => {
     diffSelect.id = 'difficulty'
     diffSelect.className = 'form-control'
     let easy = document.createElement('option')
+    easy.setAttribute('class', 'form-control')
     easy.innerText = 'Easy'
     let medium = document.createElement('option')
+    medium.setAttribute('class', 'form-control')
     medium.innerText = 'Medium'
     let hard = document.createElement('option')
+    hard.setAttribute('class', 'form-control')
     hard.innerText = 'Hard'
     diffSelect.append(easy, medium, hard)
     diffDiv.append(diffLabel, diffSelect)
@@ -128,8 +147,9 @@ playBtn.addEventListener('click', () => {
     startGameForm.append(inputLabel, userInput, br, br3, br2, diffDiv, startBtn)
     playDiv.append(startGameForm)
     mainCtn.append(playDiv)
-    startGameForm.addEventListener('submit', (event) => {
+        startGameForm.addEventListener('submit', (event) => {
         event.preventDefault()
+        debugger
         let user = document.getElementById('user-input').value
         let diff = event.target.difficulty.value
         fetch("http://localhost:3000/users", {
@@ -164,7 +184,12 @@ async function fetchWords(words, diff) {
         if (article.description != null) {
             article.description.split(" ").forEach(word => {
                 word = word.replace(/[^a-zA-Z0-9 -]/g,"")
-                words.push(word.toLowerCase())
+                if( word == "" || word == " " || word == "--" ){
+
+                } else {
+                  words.push(word.toLowerCase())
+                }
+                // debugger
             })
         }
     })
@@ -182,6 +207,7 @@ function renderGame(words, diff){
     .then(r => r.json())
     .then(r => {
       let userLabel = document.createElement('h3')
+      userLabel.setAttribute('style', 'color: #000000 !important;')
       userLabel.dataset.id = r[r.length-1].id
       userLabel.innerText = r[r.length - 1].username
       statDiv.prepend(userLabel)
@@ -195,8 +221,9 @@ function renderGame(words, diff){
     quitBtn.className = 'btn btn-danger form-control'
     quitBtn.id = 'quit'
     let inputField = document.createElement('form')
+    inputField.setAttribute('autocomplete', "off")
     inputField.innerHTML = `<input id='word' class="form-control" type='text'>
-    <input type='submit'>`
+    <input class="form-control" type='submit'>`
     let timeDiv = document.createElement('div')
     timeDiv.id = 'time'
     timeDiv.setAttribute('class', 'card border-primary mb-3')
@@ -240,7 +267,7 @@ function renderGame(words, diff){
         })
 
         // checks input with 'lowest' word
-        if (event.target.word.value === items[0].firstElementChild.innerText) {
+        if (event.target.word.value.replace(/\s/g, "") === items[0].firstElementChild.innerText) {
             score.innerText = parseInt(score.innerText) + word.value.length
             items[0].dataset.id = 1
 
@@ -255,7 +282,6 @@ function renderGame(words, diff){
         }
 
     })
-
     scoreDiv.append(scoreLabel, score)
     timeDiv.append(timerLabel, timer)
     mainCtn.setAttribute('class', 'float-left')
@@ -263,14 +289,14 @@ function renderGame(words, diff){
     statDiv.setAttribute('style', 'padding-left: 100px;')
     mainCtn.append(gameDiv, inputField)
     statDiv.prepend(scoreDiv, timeDiv, quitBtn)
-    // debugger
-
+    // auto-click on input inputField
+    let inputTag = document.getElementById('word')
+    inputTag.click()
     // timer
     var cancelTimer = setInterval(function(){incrementSeconds(timer.innerText, timer)}, 1000)
     intArray.push(cancelTimer)
     // randomize words array
     shuffle(words)
-
     // sets speed of rainWord
     let speed
     switch(diff) {
@@ -350,15 +376,25 @@ function myMove(wordDiv, wordInt, cancelTimer, diff, fast, faster, fastest) {
 
     // quit functionality
     let quitBtn = document.getElementById('quit')
-    if (quitBtn) {
-        quitBtn.addEventListener('click', () => {
-            intervals.forEach(clearInterval);
-            endGame()
-        })
+
+    function addListener(){
+      quitBtn.dataset.id = 1
+      quitBtn.addEventListener('click', () => {
+          intArray.forEach(clearInterval);
+          endGame()
+      })
     }
 
+    if (quitBtn.dataset.id == 1){
+
+    } else {
+      addListener()
+    }
+
+
+
     function frame() {
-      if (wordDiv.style.top == "500px" && wordDiv.dataset.id != 1) {
+      if (wordDiv.style.top == "515px" && wordDiv.dataset.id != 1) {
         console.log('bottom')
         let wordContainers = document.getElementsByClassName('word-container')
         let items = Array.prototype.slice.call(wordContainers)
@@ -378,7 +414,7 @@ function endGame() {
     let score = document.getElementById('score').lastElementChild.innerText
     let time = document.getElementById('time').lastElementChild.innerText
     let userId = document.getElementById('stat-container').firstElementChild.dataset.id
-
+    debugger
     fetch('http://localhost:3000/games', {
         method: "POST",
         headers: {
