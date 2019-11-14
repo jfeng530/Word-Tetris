@@ -242,7 +242,7 @@ function renderGame(words, diff){
     let timer = document.createElement('h2')
     timer.id = 'time'
     timer.className = 'card-text'
-    timer.innerText = 56
+    timer.innerText = 0
     timer.style = 'text-align: center; padding: 3px 0;'
 
     // individual body for score card
