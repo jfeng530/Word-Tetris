@@ -21,13 +21,15 @@ function shuffle(array) {
 homeBtn.addEventListener('click', () => {
     statDiv.innerHTML = ""
     mainCtn.innerHTML = `<h1>Welcome</h1>
-    <p>Rules: See how fast you can type! Type the word before it reaches the bottom.</p>
-    <br>
-    <br>
-    <h2> Languages and frameworks that we used on this project: </h2><br>
-    <img width="100px" class="pl-4" src="./JavaScript-logo.png">
-    <img width="200px" class="pl-4" src="./rails.png">
-    <img width="100px" class="pl-4" src="./bootstrap.png">`
+    <p>Rules: See how fast you can type! Enter the right word before the word touches the bottom.</p>
+    <div class="footer">
+      <div class="img-bottom">
+      <h2> languages and frameworks that we used on this project: </h2><br>
+      <img width="100px" class="pl-4" src="./JavaScript-logo.png">
+      <img width="200px" class="pl-4" src="./rails.png">
+      <img width="120px" class="pl-4" src="./bootstrap.png">
+    </div>
+  </div>`
 })
 
 // eventListener for 'High Score'
@@ -302,7 +304,7 @@ function renderGame(words, diff){
     timer.id = 'time-second'
     timer.className = 'card-text'
     timer.innerText = 0
-    timer.style = "text-align: center; padding: 3px 0; font-family: 'digital-clock-font'"
+    timer.style = "text-align: center; padding: 3px 0; font-family: 'digital-clock-font';font-size: 40px"
     // current-rank time
     let timerRankDiv = document.createElement('div')
     timerRankDiv.className = 'card-footer bg-primary'
@@ -342,9 +344,8 @@ function renderGame(words, diff){
         items.sort(function(a, b){
             return a.style.top - b.style.top
         })
-
         // checks input with 'lowest' word
-        if (event.target.word.value.replace(/\s/g, "") === items[0].firstElementChild.innerText) {
+        if ( event.target.word.value.replace(/\s/g, "") === items[0].firstElementChild.innerText ) {
             score.innerText = parseInt(score.innerText) + word.value.length
             items[0].dataset.id = 1
             // changing real-time rank for user - SCORE
@@ -363,37 +364,13 @@ function renderGame(words, diff){
                gamesScoreArr.splice(index, 1);
             }
             // 'remove' animation (animation taking too long, fast typers can't elimate next word)
-            animateCSS(items[0], 'fadeOutUpBig', function() {
+              animateCSS(items[0], 'fadeOutUpBig', function() {
+                // debugger
                 items[0].remove()
               })
-            inputField.reset()
-        } else if( event.target.word.value.replace(/\s/g, "") === items[1].firstElementChild.innerText ) {
-            score.innerText = parseInt(score.innerText) + word.value.length
-            items[1].dataset.id = 1
-            // changing real-time rank for user - SCORE
-            let scoreRank = document.getElementById('score-rank-2')
-            scoreRank.innerText = parseInt(score.innerText) + 1
-            // changing real-time rank for user - TIME
-            gamesScoreArr.push(parseInt(score.innerText))
-            gamesScoreArr.sort(function(a, b) {
-              return b - a
-            });
-            let index = gamesScoreArr.indexOf(parseInt(score.innerText))
-
-            scoreRank.innerText = index
-
-            if (index > -1) {
-               gamesScoreArr.splice(index, 1);
-            }
-            // 'remove' animation (animation taking too long, fast typers can't elimate next word)
-            debugger
-            animateCSS(items[1], 'fadeOutUpBig', function() {
-                items[1].remove()
-                debugger
-              })
-            inputField.reset()
-        } else {
-            animateCSS(items[0], 'shake', function() {
+              inputField.reset()
+            } else {
+              animateCSS(items[0], 'shake', function() {
 
               })
             inputField.reset()
@@ -466,7 +443,7 @@ function rainWord(word, gameDiv, score, wordInt, cancelTimer, diff, fast, faster
     // debugger
     let wordDiv = document.createElement('div')
     wordDiv.id = 'word-animate'
-    wordDiv.className = 'word-container'
+    wordDiv.className = 'word-container faster'
     let wordSpan = document.createElement('h3')
     wordSpan.innerText = word
     wordSpan.className = 'text-container'
