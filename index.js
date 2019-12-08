@@ -304,7 +304,7 @@ function renderGame(words, diff){
     timer.id = 'time-second'
     timer.className = 'card-text'
     timer.innerText = 0
-    timer.style = "text-align: center; padding: 3px 0; font-family: 'digital-clock-font';font-size: 40px"
+    timer.style = "text-align: center; padding: 3px 0; font-family: 'qdigital-clock-font';font-size: 40px"
     // current-rank time
     let timerRankDiv = document.createElement('div')
     timerRankDiv.className = 'card-footer bg-primary'
