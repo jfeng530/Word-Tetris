@@ -1,5 +1,5 @@
 # Word Tetris
-Word Tetris is a Game Project. Me and my partner Jacky Feng(@jfeng530) did. The Main Purpose of This Project is just F U N! And this project is available on as Web App and Cross-Platform Mobile App.
+Word Tetris is a Game Project, me and my partner Jacky Feng([@jfeng530](https://github.com/jfeng530)) did. The Main Purpose of This Project is just F U N! And this project is available on as Web App and Cross-Platform Mobile App.
 
 ## Languages and Frameworks
 These Languages and Frameworks are exclusively for Web app. And this repo is just containing **Front-End**.
