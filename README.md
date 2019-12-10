@@ -11,7 +11,8 @@ These Languages and Frameworks are exclusively for Web app. And this repo is jus
 * [Ruby](https://www.ruby-lang.org/tr/)
 * [Ruby on Rails](https://rubyonrails.org/)
 #### Link to Back-End
-[Word Tetris Back-End](https://github.com/emskaplann/backend-word-tetris)
+* [Word Tetris Back-End](https://github.com/emskaplann/backend-word-tetris)
+* [Word Tetris Mobile](https://github.com/emskaplann/word-tetris-react-native)
 
 ## Installation
 First of all, clone or fork-clone this repo and after that use the package manager **npm** to install Word-Tetris's packages locally. After all of that, you can basically open "index.html" in your browser by typing these lines in your bash.
