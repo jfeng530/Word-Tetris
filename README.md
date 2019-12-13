@@ -14,7 +14,9 @@ The Languages and Frameworks used are exclusively for the web application portio
 * [Ruby on Rails](https://rubyonrails.org/)
 
 #### Link to Back-End
-* [Word Tetris Back-End](https://github.com/emskaplann/backend-word-tetris)
+* [Word Tetris Back-End](https://github.com/jfeng530/backend-word-tetris)
+
+#### Mobile Version
 * [Word Tetris Mobile](https://github.com/emskaplann/word-tetris-react-native)
 
 ## Installation
