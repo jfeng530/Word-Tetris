@@ -64,6 +64,7 @@
   
   ### Instructions
   - Clone the most recent branch in this repository
+  > Make sure you are in the project path before running the commands
   - Run `open index.html` to start and launch on your browser
   
   ### Back-End
