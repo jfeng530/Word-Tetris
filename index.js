@@ -66,7 +66,7 @@ function renderHighScore(gameObj) {
     // get/display best time
     let modalBtn = document.getElementById('modal-button')
 
-    fetch('http://localhost:3000/games')
+    fetch('https://word-tetris.herokuapp.com/games')
     .then(r => r.json())
     .then(gamesArr => {
         gamesArr.sort(function(a, b) {
@@ -95,7 +95,7 @@ function renderHighScore(gameObj) {
     })
 
     // get/display best scores
-    fetch('http://localhost:3000/games?score=highest')
+    fetch('https://word-tetris.herokuapp.com/games?score=highest')
     .then(r => r.json())
     .then(gamesArr => {
         gamesArr.forEach(game => {
@@ -176,7 +176,7 @@ playBtn.addEventListener('click', () => {
         // debugger
         let user = document.getElementById('user-input').value
         let diff = event.target.difficulty.value
-        fetch("http://localhost:3000/users", {
+        fetch("https://word-tetris.herokuapp.com/users", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -246,7 +246,7 @@ function renderGame(words, diff){
     mainCtn.innerHTML = ""
     statDiv.innerHTML = ""
     // getting latest user has been created
-    fetch("http://localhost:3000/users")
+    fetch("https://word-tetris.herokuapp.com/users")
     .then(r => r.json())
     .then(r => {
       let userLabel = document.createElement('h3')
@@ -257,14 +257,14 @@ function renderGame(words, diff){
     })
 
     // getting all games to show current rank in real-time
-    fetch("http://localhost:3000/games")
+    fetch("https://word-tetris.herokuapp.com/games")
     .then(r => r.json())
     .then(r =>{
       r.forEach(el => {
         gamesTimeArr.push(el.time)
       })
     })
-    fetch("http://localhost:3000/games")
+    fetch("https://word-tetris.herokuapp.com/games")
     .then(r => r.json())
     .then(r =>{
       r.forEach(el => {
@@ -519,7 +519,7 @@ function endGame() {
     let time = document.getElementById('time-second').innerText
     let userId = document.getElementById('stat-container').firstElementChild.dataset.id
     // debugger
-    fetch('http://localhost:3000/games', {
+    fetch('https://word-tetris.herokuapp.com/games', {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
