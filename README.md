@@ -64,8 +64,7 @@
   
   ### Instructions
   - Clone the most recent branch in this repository
-  - Run `npm install` in your bash-enabled terminal to make sure all dependancies are installed
-  - Run `npm start` to start and launch local server on your browser
+  - Run `open index.html` to start and launch on your browser
   
   ### Back-End
   [Word Tetris Back-End](https://github.com/jfeng530/Word-Tetris-backend)
