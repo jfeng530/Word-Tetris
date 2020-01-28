@@ -27,9 +27,9 @@
   
   ### Features
   - Interactive typing game with falling words
-  - Choose three different difficulties that effects the speed of the falling words
+  - Choose three different difficulties that affects the speed of the falling words
   - High Score display with current time and score value
-  - Animations based on accuracy, time and speed
+  - Animations based on accuracy, time, and speed
   
   ### Challenges
   - The words were to be dynamically generated to create a more varied play-environment
@@ -56,7 +56,7 @@
  
 # Installation
   ### Prerequisites
-  Word Tetris is built on Ruby, Ruby on Rails & PostgreSQL. Make sure you have the latest versions of all components installed before cloning this repo. You can find their official installation guides below:
+  Word Tetris is built on Ruby, Ruby on Rails, and PostgreSQL. Make sure you have the latest versions of all components installed before cloning this repo. You can find their official installation guides below:
   
   - [Ruby](https://www.ruby-lang.org/en/documentation/installation/)
   - [Ruby On Rails](https://guides.rubyonrails.org/v5.0/getting_started.html)
